@@ -146,7 +146,7 @@ public class UserMgrController extends BaseController {
         hashMap.putAll(map);
         hashMap.put("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));
         hashMap.put("deptName", ConstantFactory.me().getDeptName(user.getDeptId()));
-
+        System.out.println(map.toString());
         return ResponseData.success(hashMap);
     }
 
@@ -232,6 +232,7 @@ public class UserMgrController extends BaseController {
         if (result.hasErrors()) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
+        System.out.println(user.toString());
         this.userService.editUser(user);
         return SUCCESS_TIP;
     }

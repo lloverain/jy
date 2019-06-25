@@ -140,6 +140,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
      */
     public Page<Map<String, Object>> selectUsers(DataScope dataScope, String name, String beginTime, String endTime, Long deptId) {
         Page page = LayuiPageFactory.defaultPage();
+//        System.out.println(page+"---"+dataScope+"---"+name+"---"+beginTime+"---"+endTime+"---"+deptId);
         return this.baseMapper.selectUsers(page, dataScope, name, beginTime, endTime, deptId);
     }
 
@@ -215,5 +216,6 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         ShiroUser lastUser = ShiroKit.getUser();
         BeanUtil.copyProperties(shiroUser, lastUser);
     }
+
 
 }

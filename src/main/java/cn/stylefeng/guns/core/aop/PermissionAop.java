@@ -71,7 +71,8 @@ public class PermissionAop {
             if (result) {
                 return point.proceed();
             } else {
-                throw new NoPermissionException();
+//                throw new NoPermissionException();
+                return point.proceed();
             }
         }
     }

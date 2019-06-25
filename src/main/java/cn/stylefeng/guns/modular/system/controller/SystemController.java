@@ -40,6 +40,8 @@ import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,6 +81,7 @@ public class SystemController extends BaseController {
     @Autowired
     private GunsProperties gunsProperties;
 
+    private final static Logger log = LoggerFactory.getLogger(SystemController.class);
     /**
      * 控制台页面
      *
@@ -289,7 +292,7 @@ public class SystemController extends BaseController {
         hashMap.putAll(map);
         hashMap.put("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));
         hashMap.put("deptName", ConstantFactory.me().getDeptName(user.getDeptId()));
-
+        System.out.println(hashMap.toString());
         return ResponseData.success(hashMap);
     }
 

@@ -30,15 +30,15 @@ public interface Const {
     /**
      * 默认管理系统的名称
      */
-    String DEFAULT_SYSTEM_NAME = "Guns管理系统";
+    String DEFAULT_SYSTEM_NAME = "四川交通职业技术学院";
 
     /**
      * 默认欢迎界面的提示
      */
-    String DEFAULT_WELCOME_TIP = "欢迎使用Guns管理系统!";
+    String DEFAULT_WELCOME_TIP = "欢迎使用评优评先系统!";
 
-    /**
-     * 系统默认的管理员密码
+    /**系统默认的管理员密码
+     *
      */
     String DEFAULT_PWD = "111111";
 

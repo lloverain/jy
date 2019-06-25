@@ -183,7 +183,7 @@ public class DeptController extends BaseController {
         Dept dept = deptService.getById(deptId);
         DeptDto deptDto = new DeptDto();
         BeanUtil.copyProperties(dept, deptDto);
-        deptDto.setPName(ConstantFactory.me().getDeptName(deptDto.getPid()));
+        deptDto.setpName(ConstantFactory.me().getDeptName(deptDto.getPid()));
         return deptDto;
     }
 

@@ -126,6 +126,27 @@ public class User implements Serializable {
     @TableField("version")
     private Integer version;
 
+    /**
+     * 系
+     */
+    @TableField("department")
+    private String department;
+
+    /**
+     * 班级
+     */
+    @TableField("banji")
+    private String banji;
+
+    /**
+     * 学号
+     */
+    @TableField("stuID")
+    private String stuID;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public Long getUserId() {
         return userId;
@@ -271,27 +292,54 @@ public class User implements Serializable {
         this.version = version;
     }
 
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getBanji() {
+        return banji;
+    }
+
+    public void setBanji(String banji) {
+        this.banji = banji;
+    }
+
+    public String getStuID() {
+        return stuID;
+    }
+
+    public void setStuID(String stuID) {
+        this.stuID = stuID;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-        "userId=" + userId +
-        ", avatar=" + avatar +
-        ", account=" + account +
-        ", password=" + password +
-        ", salt=" + salt +
-        ", name=" + name +
-        ", birthday=" + birthday +
-        ", sex=" + sex +
-        ", email=" + email +
-        ", phone=" + phone +
-        ", roleId=" + roleId +
-        ", deptId=" + deptId +
-        ", status=" + status +
-        ", createTime=" + createTime +
-        ", createUser=" + createUser +
-        ", updateTime=" + updateTime +
-        ", updateUser=" + updateUser +
-        ", version=" + version +
-        "}";
+                "userId=" + userId +
+                ", avatar='" + avatar + '\'' +
+                ", account='" + account + '\'' +
+                ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                ", name='" + name + '\'' +
+                ", birthday=" + birthday +
+                ", sex='" + sex + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", roleId='" + roleId + '\'' +
+                ", deptId=" + deptId +
+                ", status='" + status + '\'' +
+                ", createTime=" + createTime +
+                ", createUser=" + createUser +
+                ", updateTime=" + updateTime +
+                ", updateUser=" + updateUser +
+                ", version=" + version +
+                ", department='" + department + '\'' +
+                ", banji='" + banji + '\'' +
+                ", stuID='" + stuID + '\'' +
+                '}';
     }
 }
