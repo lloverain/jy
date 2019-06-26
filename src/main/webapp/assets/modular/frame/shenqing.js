@@ -19,10 +19,10 @@ layui.use(['form', 'upload', 'element', 'ax', 'laydate'], function () {
     form.val('userInfoForm', result.data);
     //表单提交事件
     form.on('submit(userInfoSubmit)', function (data) {
-        var ajax = new $ax(Feng.ctxPath + "/mgr/edit", function (data) {
-            Feng.success("修改成功!");
+        var ajax = new $ax(Feng.ctxPath + "/system/shenqing", function (data) {
+            Feng.success("申请成功!");
         }, function (data) {
-            Feng.error("修改失败!" + data.responseJSON.message + "!");
+            Feng.error("申请失败，稍后再试！" + data.responseJSON.message + "!");
         });
         ajax.set(data.field);
         ajax.start();

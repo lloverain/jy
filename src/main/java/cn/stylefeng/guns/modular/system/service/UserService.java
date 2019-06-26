@@ -77,11 +77,14 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         } else {
             this.assertAuth(user.getUserId());
             ShiroUser shiroUser = ShiroKit.getUserNotNull();
-            if (shiroUser.getId().equals(user.getUserId())) {
-                this.updateById(UserFactory.editUser(user, oldUser));
-            } else {
-                throw new ServiceException(BizExceptionEnum.NO_PERMITION);
-            }
+            this.updateById(UserFactory.editUser(user, oldUser));
+            System.out.println("shiroUser:"+shiroUser.getId().toString());
+            System.out.println("user:"+user.getUserId());
+//            if (shiroUser.getId().equals(user.getUserId())) {
+//                this.updateById(UserFactory.editUser(user, oldUser));
+//            } else {
+//                throw new ServiceException(BizExceptionEnum.NO_PERMITION);
+//            }
         }
     }
 

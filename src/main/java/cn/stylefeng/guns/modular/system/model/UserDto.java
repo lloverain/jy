@@ -43,9 +43,15 @@ public class UserDto {
     private Long deptId;
     private String status;
     private String avatar;
-    private String department;
-    private String banji;
-    private String stuID;
+
+//    private String xibie;
+//    private String nianji;
+//    private String zhuanye;
+//    private String banji;
+//    private double dychengji;
+//    private double tychengji;
+//    private double zychengji;
+
 
     public Long getUserId() {
         return userId;
@@ -143,30 +149,6 @@ public class UserDto {
         this.avatar = avatar;
     }
 
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public String getBanji() {
-        return banji;
-    }
-
-    public void setBanji(String banji) {
-        this.banji = banji;
-    }
-
-    public String getStuID() {
-        return stuID;
-    }
-
-    public void setStuID(String stuID) {
-        this.stuID = stuID;
-    }
-
     @Override
     public String toString() {
         return "UserDto{" +
@@ -182,9 +164,6 @@ public class UserDto {
                 ", deptId=" + deptId +
                 ", status='" + status + '\'' +
                 ", avatar='" + avatar + '\'' +
-                ", department='" + department + '\'' +
-                ", banji='" + banji + '\'' +
-                ", stuID='" + stuID + '\'' +
                 '}';
     }
 }

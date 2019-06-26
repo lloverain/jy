@@ -28,7 +28,11 @@ import cn.stylefeng.guns.core.common.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.system.entity.User;
+import cn.stylefeng.guns.modular.system.entity.Users;
+import cn.stylefeng.guns.modular.system.entity.student;
 import cn.stylefeng.guns.modular.system.factory.UserFactory;
+import cn.stylefeng.guns.modular.system.mapper.studentMapper;
+import cn.stylefeng.guns.modular.system.mapper.studentMapperImpl;
 import cn.stylefeng.guns.modular.system.model.UserDto;
 import cn.stylefeng.guns.modular.system.service.UserService;
 import cn.stylefeng.guns.modular.system.warpper.UserWrapper;
@@ -39,6 +43,7 @@ import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,6 +53,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -63,6 +69,8 @@ import java.util.UUID;
 public class UserMgrController extends BaseController {
 
     private static String PREFIX = "/modular/system/user/";
+
+    private static studentMapperImpl studentMapper = new studentMapperImpl();
 
     @Autowired
     private GunsProperties gunsProperties;
@@ -134,19 +142,40 @@ public class UserMgrController extends BaseController {
     @RequestMapping("/getUserInfo")
     @ResponseBody
     public Object getUserInfo(@RequestParam Long userId) {
+        Users users = new Users();
         if (ToolUtil.isEmpty(userId)) {
             throw new RequestEmptyException();
         }
 
         this.userService.assertAuth(userId);
         User user = this.userService.getById(userId);
-        Map<String, Object> map = UserFactory.removeUnSafeFields(user);
+        //转换成Users，方便多表查询
+        student student = studentMapper.selectAll(user.getUserId());
+
+
+        try {
+            BeanUtils.copyProperties(users,user);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        users.setXibie(student.getXibie());
+        users.setNianji(student.getNianji());
+        users.setZhuanye(student.getZhuanye());
+        users.setBanji(student.getBanji());
+        users.setDychengji(student.getDychengji());
+        users.setTychengji(student.getTychengji());
+        users.setZychengji(student.getZychengji());
+
+        //------------------------------------
+        Map<String, Object> map = UserFactory.removeUnSafeFields(users);
 
         HashMap<Object, Object> hashMap = CollectionUtil.newHashMap();
         hashMap.putAll(map);
-        hashMap.put("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));
-        hashMap.put("deptName", ConstantFactory.me().getDeptName(user.getDeptId()));
-        System.out.println(map.toString());
+        hashMap.put("roleName", ConstantFactory.me().getRoleName(users.getRoleId()));
+        hashMap.put("deptName", ConstantFactory.me().getDeptName(users.getDeptId()));
+//        System.out.println(hashMap.toString());
         return ResponseData.success(hashMap);
     }
 
@@ -211,11 +240,41 @@ public class UserMgrController extends BaseController {
     @BussinessLog(value = "添加管理员", key = "account", dict = UserDict.class)
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public ResponseData add(@Valid UserDto user, BindingResult result) {
+    public ResponseData add(@Valid Users users, BindingResult result) {
+        student student = new student();
+        UserDto user = new UserDto();
+        //复制bean内容1⬅️2
+        try {
+            BeanUtils.copyProperties(user,users);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        System.out.println("测试:"+user.toString());
+//        student.setUser_id(user.getUserId());
+        student.setXibie(users.getXibie());
+        student.setNianji(users.getNianji());
+        student.setZhuanye(users.getZhuanye());
+        student.setBanji(users.getBanji());
+        student.setDychengji(users.getDychengji());
+        student.setTychengji(users.getTychengji());
+        student.setZychengji(users.getZychengji());
         if (result.hasErrors()) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
         this.userService.addUser(user);
+        try {
+            String ID = studentMapper.selectID(user.getAccount());
+            student.setUser_id(Long.valueOf(ID));
+            studentMapper.insert(student);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
+        }
+
+
+
         return SUCCESS_TIP;
     }
 
@@ -228,11 +287,37 @@ public class UserMgrController extends BaseController {
     @RequestMapping("/edit")
     @BussinessLog(value = "修改管理员", key = "account", dict = UserDict.class)
     @ResponseBody
-    public ResponseData edit(@Valid UserDto user, BindingResult result) {
+    public ResponseData edit(@Valid Users users, BindingResult result) {
+        student student = new student();
+        UserDto user = new UserDto();
+        try {
+            BeanUtils.copyProperties(user,users);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        student.setUser_id(user.getUserId());
+        student.setXibie(users.getXibie());
+        student.setNianji(users.getNianji());
+        student.setZhuanye(users.getZhuanye());
+        student.setBanji(users.getBanji());
+        student.setDychengji(users.getDychengji());
+        student.setTychengji(users.getTychengji());
+        student.setZychengji(users.getZychengji());
+
+        //更新第二张表（student）
+        try {
+            studentMapper.updata(student);
+        }catch (Exception e){
+            throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
+        }
+
+
         if (result.hasErrors()) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
-        System.out.println(user.toString());
         this.userService.editUser(user);
         return SUCCESS_TIP;
     }

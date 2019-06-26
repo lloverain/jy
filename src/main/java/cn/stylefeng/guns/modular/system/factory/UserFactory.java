@@ -19,6 +19,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.stylefeng.guns.core.common.constant.state.ManagerStatus;
 import cn.stylefeng.guns.modular.system.entity.User;
+import cn.stylefeng.guns.modular.system.entity.Users;
 import cn.stylefeng.guns.modular.system.model.UserDto;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import org.springframework.beans.BeanUtils;
@@ -80,21 +81,21 @@ public class UserFactory {
             if (ToolUtil.isNotEmpty(newUser.getPhone())) {
                 oldUser.setPhone(newUser.getPhone());
             }
-            if (ToolUtil.isNotEmpty(newUser.getDepartment())) {
-                oldUser.setDepartment(newUser.getDepartment());
-            }
-            if (ToolUtil.isNotEmpty(newUser.getBanji())) {
-                oldUser.setBanji(newUser.getBanji());
-            }
-            if (ToolUtil.isNotEmpty(newUser.getStuID())) {
-                oldUser.setStuID(newUser.getStuID());
-            }
+//            if (ToolUtil.isNotEmpty(newUser.getDepartment())) {
+//                oldUser.setDepartment(newUser.getDepartment());
+//            }
+//            if (ToolUtil.isNotEmpty(newUser.getBanji())) {
+//                oldUser.setBanji(newUser.getBanji());
+//            }
+//            if (ToolUtil.isNotEmpty(newUser.getStuID())) {
+//                oldUser.setStuID(newUser.getStuID());
+//            }
             return oldUser;
         }
     }
 
     /**
-     * 过滤不安全字段并转化为map
+     * 过滤不安全字段并转化为map  User
      */
     public static Map<String, Object> removeUnSafeFields(User user) {
         if (user == null) {
@@ -104,6 +105,22 @@ public class UserFactory {
             map.remove("password");
             map.remove("salt");
             map.put("birthday", DateUtil.formatDate(user.getBirthday()));
+            return map;
+        }
+    }
+
+
+    /**
+     * 过滤不安全字段并转化为map  Users
+     */
+    public static Map<String, Object> removeUnSafeFields(Users users) {
+        if (users == null) {
+            return new HashMap<>();
+        } else {
+            Map<String, Object> map = BeanUtil.beanToMap(users);
+            map.remove("password");
+            map.remove("salt");
+            map.put("birthday", DateUtil.formatDate(users.getBirthday()));
             return map;
         }
     }

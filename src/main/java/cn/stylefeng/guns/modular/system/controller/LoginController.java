@@ -98,7 +98,7 @@ public class LoginController extends BaseController {
         String username = super.getPara("username").trim();
         String password = super.getPara("password").trim();
         String remember = super.getPara("remember");
-        System.out.println(username+"-----"+password+"----"+remember);
+//        System.out.println(username+"-----"+password+"----"+remember);
         Subject currentUser = ShiroKit.getSubject();
         //令牌
         UsernamePasswordToken token = new UsernamePasswordToken(username, password.toCharArray());

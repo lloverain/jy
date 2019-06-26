@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="student">
+    <select id="selectAll" resultType="cn.stylefeng.guns.modular.system.entity.student" parameterType="java.lang.Long">
+        select * from student where user_id = #{id}
+    </select>
+
+    <update id="updata" parameterType="cn.stylefeng.guns.modular.system.entity.student">
+        update student set xibie=#{xibie},nianji = #{nianji},zhuanye=#{zhuanye},banji=#{banji},dychengji=#{dychengji},tychengji=#{tychengji},zychengji=#{tychengji} where user_id = #{user_id}
+    </update>
+
+    <insert id="insert" parameterType="cn.stylefeng.guns.modular.system.entity.student">
+        insert into student value (#{user_id},#{xibie},#{nianji},#{zhuanye},#{banji},#{dychengji},#{tychengji},#{zychengji})
+    </insert>
+    <select id="selectID" resultType="java.lang.String" parameterType="java.lang.String">
+        select sys_user.user_id from sys_user where account = #{xuehao}
+    </select>
+
+    <insert id="shenqing_insert" parameterType="cn.stylefeng.guns.modular.system.entity.shenqing">
+        insert into application_form value (#{account},#{phone},#{xibie},#{nianji},#{zhuanye},#{banji},#{dychengji},#{tychengji},#{zychengji},#{state},#{prize})
+    </insert>
+
+    <select id="shenqing_zongji" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from application_form where account = #{xuehao}
+    </select>
+    <select id="shenqing_pass" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from application_form where account = #{xuehao} and state = 'Y'
+    </select>
+    <select id="shenqing_fail" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from application_form where account = #{xuehao} and state = 'N'
+    </select>
+</mapper>

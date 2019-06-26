@@ -17,7 +17,6 @@ layui.use(['form', 'upload', 'element', 'ax', 'laydate'], function () {
 
     //用这个方法必须用在class有layui-form的元素上
     form.val('userInfoForm', result.data);
-
     //表单提交事件
     form.on('submit(userInfoSubmit)', function (data) {
         var ajax = new $ax(Feng.ctxPath + "/mgr/edit", function (data) {

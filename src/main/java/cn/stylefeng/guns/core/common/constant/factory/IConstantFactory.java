@@ -139,4 +139,6 @@ public interface IConstantFactory {
      */
     List<Long> getParentDeptIds(Long deptId);
 
+
+
 }

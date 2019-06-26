@@ -19,16 +19,22 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.stylefeng.guns.config.properties.GunsProperties;
+import cn.stylefeng.guns.core.common.annotion.BussinessLog;
+import cn.stylefeng.guns.core.common.annotion.Permission;
+import cn.stylefeng.guns.core.common.constant.Const;
 import cn.stylefeng.guns.core.common.constant.DefaultAvatar;
+import cn.stylefeng.guns.core.common.constant.dictmap.UserDict;
 import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.shiro.ShiroUser;
-import cn.stylefeng.guns.modular.system.entity.FileInfo;
-import cn.stylefeng.guns.modular.system.entity.Notice;
-import cn.stylefeng.guns.modular.system.entity.User;
+import cn.stylefeng.guns.modular.system.entity.*;
 import cn.stylefeng.guns.modular.system.factory.UserFactory;
+import cn.stylefeng.guns.modular.system.mapper.stu_applicationImpl;
+import cn.stylefeng.guns.modular.system.mapper.studentMapper;
+import cn.stylefeng.guns.modular.system.mapper.studentMapperImpl;
+import cn.stylefeng.guns.modular.system.model.UserDto;
 import cn.stylefeng.guns.modular.system.service.FileInfoService;
 import cn.stylefeng.guns.modular.system.service.NoticeService;
 import cn.stylefeng.guns.modular.system.service.UserService;
@@ -40,18 +46,22 @@ import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +79,7 @@ import java.util.UUID;
 @Slf4j
 public class SystemController extends BaseController {
 
+    private static stu_applicationImpl stu_application = new stu_applicationImpl();
     @Autowired
     private UserService userService;
 
@@ -89,7 +100,17 @@ public class SystemController extends BaseController {
      * @Date 2018/12/24 22:43
      */
     @RequestMapping("/console")
-    public String console() {
+    public String console(Model model) {
+        Long userId = ShiroKit.getUserNotNull().getId();
+        User user = this.userService.getById(userId);
+        String xuehao = user.getAccount();
+        int zong = stu_application.selectAll(xuehao);
+        int pass = stu_application.selectpass(xuehao);
+        int fail = stu_application.selectfail(xuehao);
+        model.addAttribute("dai",zong-pass-fail);
+        model.addAttribute("zong",zong);
+        model.addAttribute("pass",pass);
+        model.addAttribute("fail",fail);
         return "/modular/frame/console.html";
     }
 
@@ -100,7 +121,33 @@ public class SystemController extends BaseController {
      * @Date 2018/12/24 22:43
      */
     @RequestMapping("/console2")
-    public String console2() {
+    public String console2(Model model) {
+        Users users = new Users();
+        Long userId = ShiroKit.getUserNotNull().getId();
+        User user = this.userService.getById(userId);
+        //转换成Users，方便多表查询
+        studentMapperImpl studentMapper = new studentMapperImpl();
+        student student = studentMapper.selectAll(user.getUserId());
+        try {
+            BeanUtils.copyProperties(users,user);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        users.setXibie(student.getXibie());
+        users.setNianji(student.getNianji());
+        users.setZhuanye(student.getZhuanye());
+        users.setBanji(student.getBanji());
+        users.setDychengji(student.getDychengji());
+        users.setTychengji(student.getTychengji());
+        users.setZychengji(student.getZychengji());
+//        System.out.println(users.toString());
+
+        model.addAllAttributes(BeanUtil.beanToMap(users));
+        model.addAttribute("roleName", ConstantFactory.me().getRoleName(users.getRoleId()));
+        model.addAttribute("deptName", ConstantFactory.me().getDeptName(users.getDeptId()));
+        LogObjectHolder.me().set(users);
         return "/modular/frame/console2.html";
     }
 
@@ -169,13 +216,32 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("/user_info")
     public String userInfo(Model model) {
+        Users users = new Users();
         Long userId = ShiroKit.getUserNotNull().getId();
         User user = this.userService.getById(userId);
+        //转换成Users，方便多表查询
+        studentMapperImpl studentMapper = new studentMapperImpl();
+        student student = studentMapper.selectAll(user.getUserId());
+        try {
+            BeanUtils.copyProperties(users,user);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        users.setXibie(student.getXibie());
+        users.setNianji(student.getNianji());
+        users.setZhuanye(student.getZhuanye());
+        users.setBanji(student.getBanji());
+        users.setDychengji(student.getDychengji());
+        users.setTychengji(student.getTychengji());
+        users.setZychengji(student.getZychengji());
+//        System.out.println(users.toString());
 
-        model.addAllAttributes(BeanUtil.beanToMap(user));
-        model.addAttribute("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));
-        model.addAttribute("deptName", ConstantFactory.me().getDeptName(user.getDeptId()));
-        LogObjectHolder.me().set(user);
+        model.addAllAttributes(BeanUtil.beanToMap(users));
+        model.addAttribute("roleName", ConstantFactory.me().getRoleName(users.getRoleId()));
+        model.addAttribute("deptName", ConstantFactory.me().getDeptName(users.getDeptId()));
+        LogObjectHolder.me().set(users);
         return "/modular/frame/user_info.html";
     }
 
@@ -279,20 +345,42 @@ public class SystemController extends BaseController {
     @RequestMapping("/currentUserInfo")
     @ResponseBody
     public ResponseData getUserInfo() {
-
+        Users users = new Users();
         ShiroUser currentUser = ShiroKit.getUser();
         if (currentUser == null) {
             throw new ServiceException(CoreExceptionEnum.NO_CURRENT_USER);
         }
 
         User user = userService.getById(currentUser.getId());
-        Map<String, Object> map = UserFactory.removeUnSafeFields(user);
+        //转换成Users，方便多表查询
+        studentMapperImpl studentMapper = new studentMapperImpl();
+        student student = studentMapper.selectAll(user.getUserId());
+//        System.out.println("查询出来的：---------"+student.toString());
+
+        try {
+            BeanUtils.copyProperties(users,user);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        users.setXibie(student.getXibie());
+        users.setNianji(student.getNianji());
+        users.setZhuanye(student.getZhuanye());
+        users.setBanji(student.getBanji());
+        users.setDychengji(student.getDychengji());
+        users.setTychengji(student.getTychengji());
+        users.setZychengji(student.getZychengji());
+
+        //------------------------------------
+        Map<String, Object> map = UserFactory.removeUnSafeFields(users);
 
         HashMap<Object, Object> hashMap = CollectionUtil.newHashMap();
         hashMap.putAll(map);
-        hashMap.put("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));
-        hashMap.put("deptName", ConstantFactory.me().getDeptName(user.getDeptId()));
-        System.out.println(hashMap.toString());
+        hashMap.put("roleName", ConstantFactory.me().getRoleName(users.getRoleId()));
+        hashMap.put("deptName", ConstantFactory.me().getDeptName(users.getDeptId()));
+//        System.out.println(hashMap.toString());
         return ResponseData.success(hashMap);
     }
 
@@ -319,5 +407,23 @@ public class SystemController extends BaseController {
         return ResponseData.success(0, "上传成功", map);
     }
 
+    @RequestMapping("/shenqing")
+    @ResponseBody
+    public ResponseData add(@Valid shenqing shenqing, BindingResult result) {
+        System.out.println(shenqing.toString());
+        if (result.hasErrors()) {
+            throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            shenqing.setState("待审核");
+            int num = stu_application.insert(shenqing);
+            if(num==0){
+                throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
+            }
+        }catch (Exception e){
+            throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
+        }
 
+        return SUCCESS_TIP;
+    }
 }
