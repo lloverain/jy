@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+<table id="title" class="yangshi">
+    <tr>
+        <th>学号</th>
+        <th>姓名</th>
+        <th>系别</th>
+        <th>年级</th>
+        <th>班级</th>
+        <th>专业</th>
+        <th>德育成绩</th>
+        <th>体育成绩</th>
+        <th>智育成绩</th>
+        <th>审核状态</th>
+        <th>奖项</th>
+        <th>审核</th>
+    </tr>
+</table>
+<style type="text/css">
+    .yangshi{
+        border-collapse: collapse;
+        width:100%;
+        border:1px solid #c6c6c6 !important;
+        margin-bottom:20px;
+    }
+    .yangshi th{
+        border-collapse: collapse;
+        border-right:1px solid #c6c6c6 !important;
+        border-bottom:1px solid #c6c6c6 !important;
+        background-color:#ddeeff !important;
+        padding:5px 9px;
+        font-size:14px;
+        font-weight:normal;
+        text-align:center;
+    }
+    .yangshi td{
+        border-collapse: collapse;
+        border-right:1px solid #c6c6c6 !important;
+        border-bottom:1px solid #c6c6c6 !important;
+        padding:5px 9px;
+        font-size:12px;
+        font-weight:normal;
+        text-align:center;
+        word-break: break-all;
+    }
+    .yangshi tr:nth-child(odd){
+        background-color:#fff !important;
+    }
+    .yangshi tr:nth-child(even){
+        background-color: #f8f8f8 !important;
+    }
+    .yangshi a{
+        text-decoration: none;
+    }
+</style>
+
+<script type="text/javascript">
+    test()
+
+    function test() {
+        var a = ${list}
+        var t = $("#title")
+        for (var i = 0; i < a.length; i++) {
+            var row =   "<tr>" +
+                "<td>"+a[i].account+"</td>" +
+                "<td>"+a[i].name+"</td>" +
+                "<td>"+a[i].xibie+"</td>" +
+                "<td>"+a[i].nianji+"</td>" +
+                "<td>"+a[i].banji+"</td>" +
+                "<td>"+a[i].zhuanye+"</td>" +
+                "<td>"+a[i].dychengji+"</td>" +
+                "<td>"+a[i].tychengji+"</td>" +
+                "<td>"+a[i].zychengji+"</td>" +
+                "<td>"+a[i].state+"</td>" +
+                "<td>"+a[i].prize+"</td>" +
+                "<td><a href='#'>通过</a>&nbsp;&nbsp;&nbsp;<a href='#'>驳回</a></td>" +
+                "</tr>";
+            t.append(row);
+        }
+    }
+</script>
+</body>
+</html>

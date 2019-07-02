@@ -93,6 +93,7 @@ public class SystemController extends BaseController {
     private GunsProperties gunsProperties;
 
     private final static Logger log = LoggerFactory.getLogger(SystemController.class);
+
     /**
      * 控制台页面
      *
@@ -107,10 +108,10 @@ public class SystemController extends BaseController {
         int zong = stu_application.selectAll(xuehao);
         int pass = stu_application.selectpass(xuehao);
         int fail = stu_application.selectfail(xuehao);
-        model.addAttribute("dai",zong-pass-fail);
-        model.addAttribute("zong",zong);
-        model.addAttribute("pass",pass);
-        model.addAttribute("fail",fail);
+        model.addAttribute("dai", zong - pass - fail);
+        model.addAttribute("zong", zong);
+        model.addAttribute("pass", pass);
+        model.addAttribute("fail", fail);
         return "/modular/frame/console.html";
     }
 
@@ -129,7 +130,7 @@ public class SystemController extends BaseController {
         studentMapperImpl studentMapper = new studentMapperImpl();
         student student = studentMapper.selectAll(user.getUserId());
         try {
-            BeanUtils.copyProperties(users,user);
+            BeanUtils.copyProperties(users, user);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -223,7 +224,7 @@ public class SystemController extends BaseController {
         studentMapperImpl studentMapper = new studentMapperImpl();
         student student = studentMapper.selectAll(user.getUserId());
         try {
-            BeanUtils.copyProperties(users,user);
+            BeanUtils.copyProperties(users, user);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -358,7 +359,7 @@ public class SystemController extends BaseController {
 //        System.out.println("查询出来的：---------"+student.toString());
 
         try {
-            BeanUtils.copyProperties(users,user);
+            BeanUtils.copyProperties(users, user);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -410,19 +411,37 @@ public class SystemController extends BaseController {
     @RequestMapping("/shenqing")
     @ResponseBody
     public ResponseData add(@Valid shenqing shenqing, BindingResult result) {
-        System.out.println(shenqing.toString());
+        Users users = new Users();
+        String prize = shenqing.getPrize();
+        Long userId = ShiroKit.getUserNotNull().getId();
+        User user = this.userService.getById(userId);
+        String account = user.getAccount();
+        users.setPrize(prize);
+        users.setAccount(account);
+
+        int repeat = stu_application.selectrepeat(users);
+        System.out.println("查询记录:" + repeat);
         if (result.hasErrors()) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
-        try {
-            shenqing.setState("待审核");
-            int num = stu_application.insert(shenqing);
-            if(num==0){
+
+        if (repeat >= 1) {
+            throw new ServiceException(BizExceptionEnum.HASAPPLIED);
+        } else {
+            try {
+                shenqing.setState("待审核");
+                shenqing.setFudaoyuan("N");
+                shenqing.setJiaowuchu("N");
+                shenqing.setXueyuan("N");
+                int num = stu_application.insert(shenqing);
+                if (num == 0) {
+                    throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
+                }
+            } catch (Exception e) {
                 throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
             }
-        }catch (Exception e){
-            throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
         }
+
 
         return SUCCESS_TIP;
     }

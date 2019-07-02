@@ -7,7 +7,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 管理员表
+ * 通用表
  * </p>
  *
  * @author stylefeng
@@ -32,8 +32,6 @@ public class Users {
     private Date updateTime;
     private Long updateUser;
     private Integer version;
-
-
     private String xibie;
 
     private String nianji;
@@ -47,6 +45,16 @@ public class Users {
     private double tychengji;
 
     private double zychengji;
+
+    private String state;
+
+    private String prize;
+
+    private String fudaoyuan;
+
+    private String jiaowuchu;
+
+    private String xueyuan;
 
     @Override
     public String toString() {
@@ -76,8 +84,15 @@ public class Users {
                 ", dychengji=" + dychengji +
                 ", tychengji=" + tychengji +
                 ", zychengji=" + zychengji +
+                ", state='" + state + '\'' +
+                ", prize='" + prize + '\'' +
+                ", fudaoyuan='" + fudaoyuan + '\'' +
+                ", jiaowuchu='" + jiaowuchu + '\'' +
+                ", xueyuan='" + xueyuan + '\'' +
                 '}';
     }
+
+
 
     public Long getUserId() {
         return userId;
@@ -277,5 +292,45 @@ public class Users {
 
     public void setZychengji(double zychengji) {
         this.zychengji = zychengji;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getPrize() {
+        return prize;
+    }
+
+    public void setPrize(String prize) {
+        this.prize = prize;
+    }
+
+    public String getFudaoyuan() {
+        return fudaoyuan;
+    }
+
+    public void setFudaoyuan(String fudaoyuan) {
+        this.fudaoyuan = fudaoyuan;
+    }
+
+    public String getJiaowuchu() {
+        return jiaowuchu;
+    }
+
+    public void setJiaowuchu(String jiaowuchu) {
+        this.jiaowuchu = jiaowuchu;
+    }
+
+    public String getXueyuan() {
+        return xueyuan;
+    }
+
+    public void setXueyuan(String xueyuan) {
+        this.xueyuan = xueyuan;
     }
 }

@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.system.mapper;
 
+import cn.stylefeng.guns.modular.system.entity.Users;
 import cn.stylefeng.guns.modular.system.entity.shenqing;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -25,5 +26,10 @@ public class stu_applicationImpl implements stu_application {
     @Override
     public int selectfail(String account) {
         return sqlSession.selectOne("student.shenqing_fail",account);
+    }
+
+    @Override
+    public int selectrepeat(Users users) {
+        return sqlSession.selectOne("student.shengqing_repeat",users);
     }
 }

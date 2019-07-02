@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.system.mapper;
 
+import cn.stylefeng.guns.modular.system.entity.Users;
 import cn.stylefeng.guns.modular.system.entity.shenqing;
 
 public interface stu_application {
@@ -7,4 +8,5 @@ public interface stu_application {
     int selectAll(String account);//个人申请总数
     int selectpass(String account);//申请通过数量
     int selectfail(String account);//申请失败数量
+    int selectrepeat(Users users);//查找是否申请过该奖项
 }

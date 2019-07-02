@@ -1,8 +1,12 @@
 package cn.stylefeng.guns.modular.system.mapper;
 
+import cn.stylefeng.guns.modular.system.entity.shenqing;
 import cn.stylefeng.guns.modular.system.entity.student;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.List;
+import java.util.Map;
 
 public class studentMapperImpl implements studentMapper {
     static ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-mybatis.xml");
@@ -25,5 +29,10 @@ public class studentMapperImpl implements studentMapper {
     @Override
     public int insert(student student) {
         return sqlSession.insert("student.insert",student);
+    }
+
+    @Override
+    public List<shenqing> selectAllshenqing(String account) {
+        return sqlSession.selectList("student.selectAllshenqing",account);
     }
 }

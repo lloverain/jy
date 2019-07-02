@@ -3,32 +3,44 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="student">
+<!--    根据ID查询学生信息-->
     <select id="selectAll" resultType="cn.stylefeng.guns.modular.system.entity.student" parameterType="java.lang.Long">
         select * from student where user_id = #{id}
     </select>
-
+<!--根据user_id更新学生信息-->
     <update id="updata" parameterType="cn.stylefeng.guns.modular.system.entity.student">
         update student set xibie=#{xibie},nianji = #{nianji},zhuanye=#{zhuanye},banji=#{banji},dychengji=#{dychengji},tychengji=#{tychengji},zychengji=#{tychengji} where user_id = #{user_id}
     </update>
-
+<!--插入学生信息-->
     <insert id="insert" parameterType="cn.stylefeng.guns.modular.system.entity.student">
         insert into student value (#{user_id},#{xibie},#{nianji},#{zhuanye},#{banji},#{dychengji},#{tychengji},#{zychengji})
     </insert>
+<!--    根据学号查询user_id-->
     <select id="selectID" resultType="java.lang.String" parameterType="java.lang.String">
         select sys_user.user_id from sys_user where account = #{xuehao}
     </select>
-
+<!--申请插入-->
     <insert id="shenqing_insert" parameterType="cn.stylefeng.guns.modular.system.entity.shenqing">
-        insert into application_form value (#{account},#{phone},#{xibie},#{nianji},#{zhuanye},#{banji},#{dychengji},#{tychengji},#{zychengji},#{state},#{prize})
+        insert into application_form value (#{account},#{phone},#{xibie},#{nianji},#{zhuanye},#{banji},#{dychengji},#{tychengji},#{zychengji},#{state},#{prize},#{fudaoyuan},#{jiaowuchu},#{xueyuan})
     </insert>
-
+<!--申请查询总的申请量-->
     <select id="shenqing_zongji" parameterType="java.lang.String" resultType="java.lang.Integer">
         select count(*) from application_form where account = #{xuehao}
     </select>
+<!--    申请通过数-->
     <select id="shenqing_pass" parameterType="java.lang.String" resultType="java.lang.Integer">
         select count(*) from application_form where account = #{xuehao} and state = 'Y'
     </select>
+<!--    申请失败量-->
     <select id="shenqing_fail" parameterType="java.lang.String" resultType="java.lang.Integer">
         select count(*) from application_form where account = #{xuehao} and state = 'N'
+    </select>
+<!--    判断是否申请过该奖金-->
+    <select id="shengqing_repeat" parameterType="cn.stylefeng.guns.modular.system.entity.Users" resultType="java.lang.Integer">
+        select count(*) from application_form where account = #{account} and prize = #{prize}
+    </select>
+<!--    根据学号查询所有申请信息-->
+    <select id="selectAllshenqing" parameterType="java.lang.String" resultType="cn.stylefeng.guns.modular.system.entity.shenqing">
+        select * from application_form where account = #{account}
     </select>
 </mapper>
