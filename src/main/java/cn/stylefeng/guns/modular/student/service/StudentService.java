@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
      */
     public int updateStudent(Student student) {
 
-        if (student.getStudentId() == null || student.getStudentId().equals("")){
+        if (student.getStudentId() == null || student.getStudentId().equals("")) {
             logger.error("学号为空");
             throw new NullPointerException();
         }
@@ -102,7 +103,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
      * @param file
      * @return
      */
-    public boolean importstudent(MultipartFile file) throws DataAccessException,IOException {
+    public boolean importstudent(MultipartFile file) throws SQLIntegrityConstraintViolationException, DataAccessException, IOException {
 
         logger.debug("执行导入操作......");
         checkFile(file);
@@ -155,6 +156,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
                 logger.debug("将一行数据添加进集合.....");
             }
             logger.debug("集合大小：" + list.size());
+
             if (studentMapper.importStudent(list) < 0) {
                 return false;
             }

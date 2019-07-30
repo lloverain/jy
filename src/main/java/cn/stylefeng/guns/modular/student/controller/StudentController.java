@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class StudentController extends BaseController {
      */
     @ResponseBody
     @RequestMapping("/import")
-    public String studentImport(@RequestParam(value = "file", required = false) MultipartFile studentFile, HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+    public String studentImport(@RequestParam(value = "file", required = false) MultipartFile studentFile, HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException, SQLIntegrityConstraintViolationException {
 
         JSONObject jsonObject = new JSONObject();
 
