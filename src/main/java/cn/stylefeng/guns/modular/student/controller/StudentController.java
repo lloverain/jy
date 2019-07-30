@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author FM
@@ -90,15 +91,32 @@ public class StudentController extends BaseController {
 
 
     /**
-     * 查询所有学生信息
+     * 查询所有学生信息 or 模糊查询
      *
      * @return
      */
     @ResponseBody
     @RequestMapping("/selectAllStudent")
-    public Object selectAllStudent() {
+    public Object selectAllStudent(@RequestParam(required = false) String basis) {
 
-        IPage page = studentService.selectAllStudentPage();
+        IPage page = null;
+        if (basis == null) {
+            page = studentService.selectAllStudentPage();
+        } else {
+            String regular = "^[0-9][0-9]*$";
+            String studentId = null;
+            String name = null;
+            if (Pattern.matches(regular, basis)){
+                logger.debug("学号是：" + basis);
+                studentId = basis;
+            }else {
+                logger.debug("姓名是：" + basis);
+                name = basis;
+            }
+           page = studentService.fuzzyQuery(studentId, name);
+
+        }
+
         return LayuiPageFactory.createPageInfo(page);
     }
 
@@ -186,7 +204,7 @@ public class StudentController extends BaseController {
 
         Student student = studentService.selectOneStudent(studentId);
         HashMap<String, String> map = new HashMap<>();
-        map.put("studentId",studentId);
+        map.put("studentId", studentId);
         map.put("name", student.getName());
         map.put("sex", student.getSex());
         map.put("age", student.getAge());

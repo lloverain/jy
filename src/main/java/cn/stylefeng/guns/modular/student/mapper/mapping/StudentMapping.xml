@@ -35,9 +35,14 @@
     <!--查询学生信息-->
     <select id="selectStudent" resultType="cn.stylefeng.guns.modular.student.entity.Student">
         select student_id,name,sex,age,id_cart,phone,address,political_status from student_info
+
         <if test="studentId != null and studentId != ''">
             where student_id = #{studentId}
         </if>
+        <if test="name != null and name != ''">
+            where name like concat(concat('%',#{name}),'%')
+        </if>
+
     </select>
     <!--    删除学生-->
     <delete id="deleteStudent">

@@ -1,4 +1,4 @@
-layui.use(['layer', 'form', 'table','upload', 'ztree', 'laydate', 'admin', 'ax'], function () {
+layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'], function () {
     var layer = layui.layer;
     var form = layui.form;
     var table = layui.table;
@@ -14,9 +14,7 @@ layui.use(['layer', 'form', 'table','upload', 'ztree', 'laydate', 'admin', 'ax']
     var MgrStudent = {
         tableId: "studentTable",    //表格id
         condition: {
-            name: "",
-            deptId: "",
-            timeLimit: ""
+            name: ""
         }
     };
 
@@ -43,11 +41,9 @@ layui.use(['layer', 'form', 'table','upload', 'ztree', 'laydate', 'admin', 'ax']
      * 点击查询按钮
      */
     MgrStudent.search = function () {
-        var queryData = {};
-        queryData['deptId'] = MgrStudent.condition.deptId;
-        queryData['name'] = $("#name").val();
-        queryData['timeLimit'] = $("#timeLimit").val();
-        table.reload(MgrStudent.tableId, {where: queryData});
+        table.reload(MgrStudent.tableId,{
+            where:{'basis':$("#name").val()}
+        });
     };
 
 
@@ -72,7 +68,7 @@ layui.use(['layer', 'form', 'table','upload', 'ztree', 'laydate', 'admin', 'ax']
         admin.putTempData('formOk', false);
 
         top.layui.admin.open({
-                type: 2,
+            type: 2,
             title: '编辑用户',
             content: Feng.ctxPath + '/student/editStudent?studentId=' + data.studentId,
             end: function () {
@@ -105,15 +101,15 @@ layui.use(['layer', 'form', 'table','upload', 'ztree', 'laydate', 'admin', 'ax']
     //上传导入文件
     upload.render({
 
-        elem:'#btnImp',
+        elem: '#btnImp',
         url: Feng.ctxPath + '/student/import',
         acceptMime: 'file/xlsx, file/xls',
-        exts:'xls|xlsx',
-        before:function(obj){
+        exts: 'xls|xlsx',
+        before: function (obj) {
             loads = layer.load();
         },
-        done:function (res) {
-            if (res.code === "ok"){
+        done: function (res) {
+            if (res.code === "ok") {
                 layer.close(loads);
                 layer.msg("导入成功")
                 table.reload(MgrStudent.tableId)
@@ -122,7 +118,7 @@ layui.use(['layer', 'form', 'table','upload', 'ztree', 'laydate', 'admin', 'ax']
                 layer.msg("导入失败")
             }
         },
-        error:function () {
+        error: function () {
             layer.msg("导入出错")
         }
     })
