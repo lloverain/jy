@@ -47,7 +47,8 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
      */
     public IPage selectAllStudentPage() {
         logger.debug("开始查询所有学生......");
-        return LayuiPageFactory.defaultPage().setRecords(studentMapper.selectStudent(null,null));
+        Page page = LayuiPageFactory.defaultPage();
+        return page.setRecords(studentMapper.selectStudent(page,null,null));
     }
 
     /**
@@ -58,7 +59,8 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
      */
     public IPage fuzzyQuery(String studentId,String name){
         logger.debug("开始模糊查询....");
-        return LayuiPageFactory.defaultPage().setRecords(studentMapper.selectStudent(studentId,name));
+        Page page = LayuiPageFactory.defaultPage();
+        return page.setRecords(studentMapper.selectStudent(page,studentId,name));
     }
 
     /**
@@ -68,7 +70,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
      */
     public Student selectOneStudent(String studentId) {
         logger.debug("开始查询单个学生....");
-        return studentMapper.selectStudent(studentId,null).get(0);
+        return studentMapper.selectStudent(null,studentId,null).get(0);
     }
 
     /**

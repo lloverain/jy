@@ -23,7 +23,7 @@ public interface StudentMapper extends BaseMapper<Student> {
     int importStudent(List<Student> list) throws DataAccessException, SQLIntegrityConstraintViolationException;
 
     //查询学生信息
-    List<Student> selectStudent(@Param("studentId") String studentId,@Param("name") String name);
+    List<Student> selectStudent(@Param("page") Page<Student> page,@Param("studentId") String studentId,@Param("name") String name);
 
     //删除学生
     int deleteStudent(@Param("studentId") String studentId);
