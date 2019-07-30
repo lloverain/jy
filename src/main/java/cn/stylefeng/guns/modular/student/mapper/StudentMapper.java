@@ -4,6 +4,7 @@ import cn.stylefeng.guns.modular.student.entity.Student;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 public interface StudentMapper extends BaseMapper<Student> {
 
     //插入一组学生
-    int importStudent(List<Student> list);
+    int importStudent(List<Student> list) throws DataAccessException;
 
     //查询学生信息
     List<Student> selectStudent(@Param("page") Page<Student> page,@Param("studentId") String studentId);

@@ -48,7 +48,7 @@ public class StudentController extends BaseController {
     @Autowired
     private StudentService studentService;
 
-    private static String ROOT = "/modular/student/";
+    private static String ROOTS = "/modular/student/";
 
     /**
      * 学生管理界面
@@ -58,7 +58,7 @@ public class StudentController extends BaseController {
     @RequestMapping("/studentMgr")
     public String studentImAndEx() {
         logger.debug("进入学生管理页面");
-        return ROOT + "studentMgr.html";
+        return ROOTS + "studentMgr.html";
     }
 
     /**
@@ -126,7 +126,7 @@ public class StudentController extends BaseController {
         Student student = studentService.selectOneStudent(studentId);
         LogObjectHolder.me().set(student);
         logger.debug("跳转编辑页面");
-        return ROOT + "student/student_edit.html";
+        return ROOTS + "student/student_edit.html";
     }
 
     /**

@@ -16,6 +16,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -83,7 +84,6 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
             logger.error("学号为空");
             throw new NullPointerException();
         }
-
         return studentMapper.updateStudent(student.getStudentId(),
                 student.getName(),
                 student.getSex(),
@@ -93,8 +93,6 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
                 student.getAddress(),
                 student.getPoliticalStatus()
         );
-
-
     }
 
 
@@ -104,7 +102,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
      * @param file
      * @return
      */
-    public boolean importstudent(MultipartFile file) throws IOException {
+    public boolean importstudent(MultipartFile file) throws DataAccessException,IOException {
 
         logger.debug("执行导入操作......");
         checkFile(file);
