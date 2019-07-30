@@ -100,17 +100,25 @@ layui.use(['layer', 'form', 'table','upload', 'ztree', 'laydate', 'admin', 'ax']
         Feng.confirm("是否删除学生" + data.studentId + "?", operation);
     };
 
+    //加载动画
+    let loads;
     //上传导入文件
     upload.render({
+
         elem:'#btnImp',
-        url:  Feng.ctxPath + '/student/import',
-        accept:'file',
+        url: Feng.ctxPath + '/student/import',
+        acceptMime: 'file/xlsx, file/xls',
         exts:'xls|xlsx',
+        before:function(obj){
+            loads = layer.load();
+        },
         done:function (res) {
             if (res.code === "ok"){
+                layer.close(loads);
                 layer.msg("导入成功")
                 table.reload(MgrStudent.tableId)
             } else {
+                layer.close(loads);
                 layer.msg("导入失败")
             }
         },
@@ -156,9 +164,7 @@ layui.use(['layer', 'form', 'table','upload', 'ztree', 'laydate', 'admin', 'ax']
     table.on('tool(' + MgrStudent.tableId + ')', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-
         if (layEvent === 'edit') {
-
             MgrStudent.onEditUser(data);
         } else if (layEvent === 'delete') {
             MgrStudent.onDeleteUser(data);
