@@ -43,4 +43,21 @@
     <select id="selectAllshenqing" parameterType="java.lang.String" resultType="cn.stylefeng.guns.modular.system.entity.shenqing">
         select * from application_form where account = #{account}
     </select>
+
+    <select id="xueyuan" parameterType="cn.stylefeng.guns.modular.system.entity.shenqing">
+        select * from application_form where fudaoyuan = 'Y' and jiaowuchu = 'Y'
+    </select>
+
+    <select id="guanliyuan" parameterType="cn.stylefeng.guns.modular.system.entity.shenqing">
+        select * from application_form where fudaoyuan = 'Y'
+    </select>
+
+    <select id="jiaoshi" parameterType="cn.stylefeng.guns.modular.system.entity.shenqing">
+        select * from application_form
+    </select>
+
+<!--    检查什么角色-->
+    <select id="role" resultType="java.lang.String" parameterType="java.lang.String">
+        select description from sys_role where role_id = #{quanxian}
+    </select>
 </mapper>

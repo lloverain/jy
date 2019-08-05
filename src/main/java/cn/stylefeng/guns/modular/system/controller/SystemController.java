@@ -31,10 +31,6 @@ import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.shiro.ShiroUser;
 import cn.stylefeng.guns.modular.system.entity.*;
 import cn.stylefeng.guns.modular.system.factory.UserFactory;
-import cn.stylefeng.guns.modular.system.mapper.stu_applicationImpl;
-import cn.stylefeng.guns.modular.system.mapper.studentMapper;
-import cn.stylefeng.guns.modular.system.mapper.studentMapperImpl;
-import cn.stylefeng.guns.modular.system.model.UserDto;
 import cn.stylefeng.guns.modular.system.service.FileInfoService;
 import cn.stylefeng.guns.modular.system.service.NoticeService;
 import cn.stylefeng.guns.modular.system.service.UserService;
@@ -79,7 +75,6 @@ import java.util.UUID;
 @Slf4j
 public class SystemController extends BaseController {
 
-    private static stu_applicationImpl stu_application = new stu_applicationImpl();
     @Autowired
     private UserService userService;
 
@@ -105,13 +100,13 @@ public class SystemController extends BaseController {
         Long userId = ShiroKit.getUserNotNull().getId();
         User user = this.userService.getById(userId);
         String xuehao = user.getAccount();
-        int zong = stu_application.selectAll(xuehao);
-        int pass = stu_application.selectpass(xuehao);
-        int fail = stu_application.selectfail(xuehao);
-        model.addAttribute("dai", zong - pass - fail);
-        model.addAttribute("zong", zong);
-        model.addAttribute("pass", pass);
-        model.addAttribute("fail", fail);
+//        int zong = stu_application.selectAll(xuehao);
+//        int pass = stu_application.selectpass(xuehao);
+//        int fail = stu_application.selectfail(xuehao);
+//        model.addAttribute("dai", zong - pass - fail);
+//        model.addAttribute("zong", zong);
+//        model.addAttribute("pass", pass);
+//        model.addAttribute("fail", fail);
         return "/modular/frame/console.html";
     }
 
@@ -126,26 +121,9 @@ public class SystemController extends BaseController {
         Users users = new Users();
         Long userId = ShiroKit.getUserNotNull().getId();
         User user = this.userService.getById(userId);
-        //转换成Users，方便多表查询
-        studentMapperImpl studentMapper = new studentMapperImpl();
-        student student = studentMapper.selectAll(user.getUserId());
-        try {
-            BeanUtils.copyProperties(users, user);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        users.setXibie(student.getXibie());
-        users.setNianji(student.getNianji());
-        users.setZhuanye(student.getZhuanye());
-        users.setBanji(student.getBanji());
-        users.setDychengji(student.getDychengji());
-        users.setTychengji(student.getTychengji());
-        users.setZychengji(student.getZychengji());
-//        System.out.println(users.toString());
 
-        model.addAllAttributes(BeanUtil.beanToMap(users));
+
+//        model.addAllAttributes(BeanUtil.beanToMap(users));
         model.addAttribute("roleName", ConstantFactory.me().getRoleName(users.getRoleId()));
         model.addAttribute("deptName", ConstantFactory.me().getDeptName(users.getDeptId()));
         LogObjectHolder.me().set(users);
@@ -220,26 +198,8 @@ public class SystemController extends BaseController {
         Users users = new Users();
         Long userId = ShiroKit.getUserNotNull().getId();
         User user = this.userService.getById(userId);
-        //转换成Users，方便多表查询
-        studentMapperImpl studentMapper = new studentMapperImpl();
-        student student = studentMapper.selectAll(user.getUserId());
-        try {
-            BeanUtils.copyProperties(users, user);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        users.setXibie(student.getXibie());
-        users.setNianji(student.getNianji());
-        users.setZhuanye(student.getZhuanye());
-        users.setBanji(student.getBanji());
-        users.setDychengji(student.getDychengji());
-        users.setTychengji(student.getTychengji());
-        users.setZychengji(student.getZychengji());
-//        System.out.println(users.toString());
 
-        model.addAllAttributes(BeanUtil.beanToMap(users));
+//        model.addAllAttributes(BeanUtil.beanToMap(users));
         model.addAttribute("roleName", ConstantFactory.me().getRoleName(users.getRoleId()));
         model.addAttribute("deptName", ConstantFactory.me().getDeptName(users.getDeptId()));
         LogObjectHolder.me().set(users);
@@ -351,37 +311,12 @@ public class SystemController extends BaseController {
         if (currentUser == null) {
             throw new ServiceException(CoreExceptionEnum.NO_CURRENT_USER);
         }
-
         User user = userService.getById(currentUser.getId());
-        //转换成Users，方便多表查询
-        studentMapperImpl studentMapper = new studentMapperImpl();
-        student student = studentMapper.selectAll(user.getUserId());
-//        System.out.println("查询出来的：---------"+student.toString());
-
-        try {
-            BeanUtils.copyProperties(users, user);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        users.setXibie(student.getXibie());
-        users.setNianji(student.getNianji());
-        users.setZhuanye(student.getZhuanye());
-        users.setBanji(student.getBanji());
-        users.setDychengji(student.getDychengji());
-        users.setTychengji(student.getTychengji());
-        users.setZychengji(student.getZychengji());
-
-        //------------------------------------
-        Map<String, Object> map = UserFactory.removeUnSafeFields(users);
-
+        Map<String, Object> map = UserFactory.removeUnSafeFields(user);
         HashMap<Object, Object> hashMap = CollectionUtil.newHashMap();
         hashMap.putAll(map);
-        hashMap.put("roleName", ConstantFactory.me().getRoleName(users.getRoleId()));
-        hashMap.put("deptName", ConstantFactory.me().getDeptName(users.getDeptId()));
-//        System.out.println(hashMap.toString());
+        hashMap.put("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));
+        hashMap.put("deptName", ConstantFactory.me().getDeptName(user.getDeptId()));
         return ResponseData.success(hashMap);
     }
 
@@ -408,41 +343,41 @@ public class SystemController extends BaseController {
         return ResponseData.success(0, "上传成功", map);
     }
 
-    @RequestMapping("/shenqing")
-    @ResponseBody
-    public ResponseData add(@Valid shenqing shenqing, BindingResult result) {
-        Users users = new Users();
-        String prize = shenqing.getPrize();
-        Long userId = ShiroKit.getUserNotNull().getId();
-        User user = this.userService.getById(userId);
-        String account = user.getAccount();
-        users.setPrize(prize);
-        users.setAccount(account);
-
-        int repeat = stu_application.selectrepeat(users);
-        System.out.println("查询记录:" + repeat);
-        if (result.hasErrors()) {
-            throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
-        }
-
-        if (repeat >= 1) {
-            throw new ServiceException(BizExceptionEnum.HASAPPLIED);
-        } else {
-            try {
-                shenqing.setState("待审核");
-                shenqing.setFudaoyuan("N");
-                shenqing.setJiaowuchu("N");
-                shenqing.setXueyuan("N");
-                int num = stu_application.insert(shenqing);
-                if (num == 0) {
-                    throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
-                }
-            } catch (Exception e) {
-                throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
-            }
-        }
-
-
-        return SUCCESS_TIP;
-    }
+//    @RequestMapping("/shenqing")
+//    @ResponseBody
+//    public ResponseData add(@Valid shenqing shenqing, BindingResult result) {
+//        Users users = new Users();
+//        String prize = shenqing.getPrize();
+//        Long userId = ShiroKit.getUserNotNull().getId();
+//        User user = this.userService.getById(userId);
+//        String account = user.getAccount();
+//        users.setPrize(prize);
+//        users.setAccount(account);
+//
+//        int repeat = stu_application.selectrepeat(users);
+//        System.out.println("查询记录:" + repeat);
+//        if (result.hasErrors()) {
+//            throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
+//        }
+//
+//        if (repeat >= 1) {
+//            throw new ServiceException(BizExceptionEnum.HASAPPLIED);
+//        } else {
+//            try {
+//                shenqing.setState("待审核");
+//                shenqing.setFudaoyuan("N");
+//                shenqing.setJiaowuchu("N");
+//                shenqing.setXueyuan("N");
+//                int num = stu_application.insert(shenqing);
+//                if (num == 0) {
+//                    throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
+//                }
+//            } catch (Exception e) {
+//                throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
+//            }
+//        }
+//
+//
+//        return SUCCESS_TIP;
+//    }
 }

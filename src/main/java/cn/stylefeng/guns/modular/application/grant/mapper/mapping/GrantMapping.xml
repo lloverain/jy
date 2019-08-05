@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.application.grant.mapper.GrantMapper">
+
+    <resultMap id="grant" type="cn.stylefeng.guns.modular.application.grant.entity.Grant">
+        <id column="studentId" property="student_id"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="phone" property="phone"/>
+        <result column="address" property="address"/>
+        <result column="politicalStatus" property="political_status"/>
+        <result column="familyAnnualIncome" property="familyAnnualIncome"/>
+<!--        <result column="image" property="image"/>-->
+        <result column="dept_id" property="dept_id"/>
+    </resultMap>
+
+    <insert id="insertgrant" parameterType="cn.stylefeng.guns.modular.application.grant.entity.Grant">
+        insert into student_grant values (#{grant.studentId},#{grant.name},#{grant.sex},#{grant.age},#{grant.phone},#{grant.address},#{grant.politicalStatus},#{grant.familyAnnualIncome},#{grant.image},#{grant.dept_id})
+    </insert>
+    <select id="selectgrant" resultType="cn.stylefeng.guns.modular.application.grant.entity.Grant" parameterType="cn.stylefeng.guns.modular.application.grant.entity.Grant">
+        select * from student_grant where student_id = #{studentId}
+    </select>
+</mapper>

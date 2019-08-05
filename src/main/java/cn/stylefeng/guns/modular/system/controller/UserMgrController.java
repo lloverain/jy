@@ -29,10 +29,7 @@ import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.system.entity.User;
 import cn.stylefeng.guns.modular.system.entity.Users;
-import cn.stylefeng.guns.modular.system.entity.student;
 import cn.stylefeng.guns.modular.system.factory.UserFactory;
-import cn.stylefeng.guns.modular.system.mapper.studentMapper;
-import cn.stylefeng.guns.modular.system.mapper.studentMapperImpl;
 import cn.stylefeng.guns.modular.system.model.UserDto;
 import cn.stylefeng.guns.modular.system.service.UserService;
 import cn.stylefeng.guns.modular.system.warpper.UserWrapper;
@@ -69,8 +66,6 @@ import java.util.UUID;
 public class UserMgrController extends BaseController {
 
     private static String PREFIX = "/modular/system/user/";
-
-    private static studentMapperImpl studentMapper = new studentMapperImpl();
 
     @Autowired
     private GunsProperties gunsProperties;
@@ -148,27 +143,6 @@ public class UserMgrController extends BaseController {
         }
 
         this.userService.assertAuth(userId);
-        User user = this.userService.getById(userId);
-        //转换成Users，方便多表查询
-        student student = studentMapper.selectAll(user.getUserId());
-
-
-        try {
-            BeanUtils.copyProperties(users,user);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        users.setXibie(student.getXibie());
-        users.setNianji(student.getNianji());
-        users.setZhuanye(student.getZhuanye());
-        users.setBanji(student.getBanji());
-        users.setDychengji(student.getDychengji());
-        users.setTychengji(student.getTychengji());
-        users.setZychengji(student.getZychengji());
-
-        //------------------------------------
         Map<String, Object> map = UserFactory.removeUnSafeFields(users);
 
         HashMap<Object, Object> hashMap = CollectionUtil.newHashMap();
@@ -241,37 +215,11 @@ public class UserMgrController extends BaseController {
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
     public ResponseData add(@Valid Users users, BindingResult result) {
-        student student = new student();
         UserDto user = new UserDto();
-        //复制bean内容1⬅️2
-        try {
-            BeanUtils.copyProperties(user,users);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        System.out.println("测试:"+user.toString());
-//        student.setUser_id(user.getUserId());
-        student.setXibie(users.getXibie());
-        student.setNianji(users.getNianji());
-        student.setZhuanye(users.getZhuanye());
-        student.setBanji(users.getBanji());
-        student.setDychengji(users.getDychengji());
-        student.setTychengji(users.getTychengji());
-        student.setZychengji(users.getZychengji());
         if (result.hasErrors()) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
         this.userService.addUser(user);
-        try {
-            String ID = studentMapper.selectID(user.getAccount());
-            student.setUser_id(Long.valueOf(ID));
-            studentMapper.insert(student);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
-        }
 
 
 
@@ -288,7 +236,6 @@ public class UserMgrController extends BaseController {
     @BussinessLog(value = "修改管理员", key = "account", dict = UserDict.class)
     @ResponseBody
     public ResponseData edit(@Valid Users users, BindingResult result) {
-        student student = new student();
         UserDto user = new UserDto();
         try {
             BeanUtils.copyProperties(user,users);
@@ -297,24 +244,6 @@ public class UserMgrController extends BaseController {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-
-        student.setUser_id(user.getUserId());
-        student.setXibie(users.getXibie());
-        student.setNianji(users.getNianji());
-        student.setZhuanye(users.getZhuanye());
-        student.setBanji(users.getBanji());
-        student.setDychengji(users.getDychengji());
-        student.setTychengji(users.getTychengji());
-        student.setZychengji(users.getZychengji());
-
-        //更新第二张表（student）
-        try {
-            studentMapper.updata(student);
-        }catch (Exception e){
-            throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
-        }
-
-
         if (result.hasErrors()) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -332,7 +261,7 @@ public class UserMgrController extends BaseController {
     @BussinessLog(value = "删除管理员", key = "userId", dict = UserDict.class)
     @Permission
     @ResponseBody
-    public ResponseData delete(@RequestParam Long userId) {
+    public ResponseData delete(@RequestParam Long userId)  {
         if (ToolUtil.isEmpty(userId)) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }

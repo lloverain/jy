@@ -70,6 +70,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
      * @Date 2018/12/24 22:53
      */
     public void editUser(UserDto user) {
+        System.out.println("修改的信息："+user.toString());
         User oldUser = this.getById(user.getUserId());
 
         if (ShiroKit.hasRole(Const.ADMIN_NAME)) {

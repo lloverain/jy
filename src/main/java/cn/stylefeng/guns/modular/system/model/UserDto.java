@@ -44,15 +44,6 @@ public class UserDto {
     private String status;
     private String avatar;
 
-//    private String xibie;
-//    private String nianji;
-//    private String zhuanye;
-//    private String banji;
-//    private double dychengji;
-//    private double tychengji;
-//    private double zychengji;
-
-
     public Long getUserId() {
         return userId;
     }
