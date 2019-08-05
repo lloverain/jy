@@ -1,4 +1,4 @@
-package cn.stylefeng.guns.modular.application.grant.entity;
+package cn.stylefeng.guns.modular.application.entity;
 
 public class Grant {
     private String studentId;           //学号
@@ -9,7 +9,7 @@ public class Grant {
     private String address;             //地址
     private String politicalStatus;     //政治面貌
     private String familyAnnualIncome;  //家庭年收入
-    //    private Object image;               //证明材料图片
+    private Object image;               //证明材料图片
     private String dept_id;             //区别班级，以后老师对自己对班级审核
 
     @Override
@@ -23,6 +23,7 @@ public class Grant {
                 ", address='" + address + '\'' +
                 ", politicalStatus='" + politicalStatus + '\'' +
                 ", familyAnnualIncome='" + familyAnnualIncome + '\'' +
+                ", image=" + image +
                 ", dept_id='" + dept_id + '\'' +
                 '}';
     }
@@ -89,6 +90,14 @@ public class Grant {
 
     public void setFamilyAnnualIncome(String familyAnnualIncome) {
         this.familyAnnualIncome = familyAnnualIncome;
+    }
+
+    public Object getImage() {
+        return image;
+    }
+
+    public void setImage(Object image) {
+        this.image = image;
     }
 
     public String getDept_id() {

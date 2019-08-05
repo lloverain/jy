@@ -1,12 +1,9 @@
-package cn.stylefeng.guns.modular.application.grant.service;
+package cn.stylefeng.guns.modular.application.service;
 
-import cn.stylefeng.guns.modular.application.grant.entity.Grant;
+import cn.stylefeng.guns.modular.application.entity.Grant;
 import org.junit.Test;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class GrantServiceTest {
 

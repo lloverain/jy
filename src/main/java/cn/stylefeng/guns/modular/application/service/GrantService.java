@@ -1,7 +1,7 @@
-package cn.stylefeng.guns.modular.application.grant.service;
+package cn.stylefeng.guns.modular.application.service;
 
-import cn.stylefeng.guns.modular.application.grant.entity.Grant;
-import cn.stylefeng.guns.modular.application.grant.mapper.GrantMapper;
+import cn.stylefeng.guns.modular.application.entity.Grant;
+import cn.stylefeng.guns.modular.application.mapper.GrantMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

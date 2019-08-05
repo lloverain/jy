@@ -1,6 +1,6 @@
-package cn.stylefeng.guns.modular.application.grant.mapper;
+package cn.stylefeng.guns.modular.application.mapper;
 
-import cn.stylefeng.guns.modular.application.grant.entity.Grant;
+import cn.stylefeng.guns.modular.application.entity.Grant;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
