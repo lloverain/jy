@@ -137,19 +137,16 @@ public class UserMgrController extends BaseController {
     @RequestMapping("/getUserInfo")
     @ResponseBody
     public Object getUserInfo(@RequestParam Long userId) {
-        Users users = new Users();
         if (ToolUtil.isEmpty(userId)) {
             throw new RequestEmptyException();
         }
-
         this.userService.assertAuth(userId);
-        Map<String, Object> map = UserFactory.removeUnSafeFields(users);
-
+        User user = this.userService.getById(userId);
+        Map<String, Object> map = UserFactory.removeUnSafeFields(user);
         HashMap<Object, Object> hashMap = CollectionUtil.newHashMap();
         hashMap.putAll(map);
-        hashMap.put("roleName", ConstantFactory.me().getRoleName(users.getRoleId()));
-        hashMap.put("deptName", ConstantFactory.me().getDeptName(users.getDeptId()));
-//        System.out.println(hashMap.toString());
+        hashMap.put("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));
+        hashMap.put("deptName", ConstantFactory.me().getDeptName(user.getDeptId()));
         return ResponseData.success(hashMap);
     }
 
@@ -216,6 +213,11 @@ public class UserMgrController extends BaseController {
     @ResponseBody
     public ResponseData add(@Valid Users users, BindingResult result) {
         UserDto user = new UserDto();
+        try {
+            BeanUtils.copyProperties(user,users);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
         if (result.hasErrors()) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -239,9 +241,7 @@ public class UserMgrController extends BaseController {
         UserDto user = new UserDto();
         try {
             BeanUtils.copyProperties(user,users);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
         if (result.hasErrors()) {

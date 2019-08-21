@@ -49,7 +49,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
      * @Date 2018/12/24 22:51
      */
     public void addUser(UserDto user) {
-
+        System.out.println(user.toString());
         // 判断账号是否重复
         User theUser = this.getByAccount(user.getAccount());
         if (theUser != null) {

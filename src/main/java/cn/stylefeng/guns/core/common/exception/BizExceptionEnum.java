@@ -74,6 +74,7 @@ public enum BizExceptionEnum implements AbstractBaseExceptionEnum {
      *申请的错误
      */
     HASAPPLIED(400,"该奖项已申请，请勿重复申请"),
+    PLEASE_SUBMIT_THE_PICTURE_FIRST(400,"请先提交证明"),
 
     /**
      * token异常

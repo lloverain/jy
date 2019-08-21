@@ -96,3 +96,37 @@
 .user-info-form .layui-form-item {
     margin-bottom: 25px;
 }
+#preview{
+    background-color: #00A65A;
+    float: right;
+    position: absolute;
+    left: 400px;
+    top: -500px;
+    width: auto;
+    height: auto;
+    max-width: 180%;
+}
+.tu{
+    width: 90px;
+    height: 90px;
+    float: right;
+}
+.notclick{
+    pointer-events: none;
+}
+
+label{
+    position: relative;
+}
+#file{
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+#btn{
+    margin-right: 5px;
+}
+#text{
+    color: red;
+}

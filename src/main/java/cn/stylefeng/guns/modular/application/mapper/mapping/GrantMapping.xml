@@ -9,18 +9,43 @@
         <result column="name" property="name"/>
         <result column="sex" property="sex"/>
         <result column="age" property="age"/>
+        <result column="idCart" property="id_cart"/>
         <result column="phone" property="phone"/>
         <result column="address" property="address"/>
         <result column="politicalStatus" property="political_status"/>
         <result column="familyAnnualIncome" property="familyAnnualIncome"/>
         <result column="image" property="image"/>
         <result column="dept_id" property="dept_id"/>
-    </resultMap>
+        <result column="bonusType" property="bonus_type"/>
 
+    </resultMap>
+<!--    插入证明-->
     <insert id="insertgrant" parameterType="cn.stylefeng.guns.modular.application.entity.Grant">
-        insert into student_grant values (#{grant.studentId},#{grant.name},#{grant.sex},#{grant.age},#{grant.phone},#{grant.address},#{grant.politicalStatus},#{grant.familyAnnualIncome},#{grant.image},#{grant.dept_id})
+        insert into student_grant values (#{studentId},#{name},#{sex},#{age},#{idCart},#{phone},#{address},#{politicalStatus},
+                    #{familyAnnualIncome},#{image},#{dept_id},#{bonusType},'F','F','F','F','F','3')
     </insert>
+
+<!--查看个人申请-->
     <select id="selectgrant" resultType="cn.stylefeng.guns.modular.application.entity.Grant" parameterType="cn.stylefeng.guns.modular.application.entity.Grant">
         select * from student_grant where student_id = #{studentId}
     </select>
+<!--提交前检查是否提交过-->
+    <select id="select_repeat" resultType="cn.stylefeng.guns.modular.application.entity.Grant">
+        select * from student_grant where student_id=#{studentId} and bonus_type = #{bonusType}
+    </select>
+<!--查询班级-->
+    <select id="select_dept_id" resultType="java.lang.String" parameterType="java.lang.String">
+        select dept_id from sys_user where user_id = #{studentId}
+    </select>
+
+    <select id="select_state" resultType="java.lang.String">
+        select state from student_grant where student_id=#{studentId} and bonus_type = #{bonusType}
+    </select>
+
+    <update id="updatagrant" parameterType="cn.stylefeng.guns.modular.application.entity.Grant">
+        update student_grant set name = #{name},sex = #{sex},age = #{age},id_cart = #{idCart},
+        phone = #{phone},address = #{address},political_status = #{politicalStatus},
+                    familyAnnualIncome = #{familyAnnualIncome},image = #{image},state = '3' where student_id = #{studentId} and bonus_type = #{bonusType}
+    </update>
+
 </mapper>

@@ -1,9 +1,7 @@
 package cn.stylefeng.guns.modular.student.controller;
 
 
-import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.common.page.LayuiPageFactory;
-import cn.stylefeng.guns.core.common.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.modular.student.entity.Student;
 import cn.stylefeng.guns.modular.student.service.StudentService;
@@ -12,8 +10,6 @@ import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +27,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**

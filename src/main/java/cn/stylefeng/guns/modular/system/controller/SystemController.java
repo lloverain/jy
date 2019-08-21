@@ -15,21 +15,19 @@
  */
 package cn.stylefeng.guns.modular.system.controller;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.stylefeng.guns.config.properties.GunsProperties;
-import cn.stylefeng.guns.core.common.annotion.BussinessLog;
-import cn.stylefeng.guns.core.common.annotion.Permission;
-import cn.stylefeng.guns.core.common.constant.Const;
 import cn.stylefeng.guns.core.common.constant.DefaultAvatar;
-import cn.stylefeng.guns.core.common.constant.dictmap.UserDict;
 import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.shiro.ShiroUser;
-import cn.stylefeng.guns.modular.system.entity.*;
+import cn.stylefeng.guns.modular.system.entity.FileInfo;
+import cn.stylefeng.guns.modular.system.entity.Notice;
+import cn.stylefeng.guns.modular.system.entity.User;
+import cn.stylefeng.guns.modular.system.entity.Users;
 import cn.stylefeng.guns.modular.system.factory.UserFactory;
 import cn.stylefeng.guns.modular.system.service.FileInfoService;
 import cn.stylefeng.guns.modular.system.service.NoticeService;
@@ -42,22 +40,18 @@ import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import cn.stylefeng.roses.kernel.model.exception.enums.CoreExceptionEnum;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
@@ -116,19 +110,18 @@ public class SystemController extends BaseController {
      * @author fengshuonan
      * @Date 2018/12/24 22:43
      */
-    @RequestMapping("/console2")
-    public String console2(Model model) {
-        Users users = new Users();
-        Long userId = ShiroKit.getUserNotNull().getId();
-        User user = this.userService.getById(userId);
-
-
-//        model.addAllAttributes(BeanUtil.beanToMap(users));
-        model.addAttribute("roleName", ConstantFactory.me().getRoleName(users.getRoleId()));
-        model.addAttribute("deptName", ConstantFactory.me().getDeptName(users.getDeptId()));
-        LogObjectHolder.me().set(users);
-        return "/modular/frame/console2.html";
-    }
+//    @RequestMapping("/console2")
+//    public String console2(Model model) {
+//        Users users = new Users();
+//        Long userId = ShiroKit.getUserNotNull().getId();
+//        User user = this.userService.getById(userId);
+//
+//        model.addAllAttributes(BeanUtil.beanToMap(user));
+//        model.addAttribute("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));
+//        model.addAttribute("deptName", ConstantFactory.me().getDeptName(user.getDeptId()));
+//        LogObjectHolder.me().set(user);
+//        return "/modular/frame/console2.html";
+//    }
 
     /**
      * 跳转到首页通知
@@ -198,8 +191,6 @@ public class SystemController extends BaseController {
         Users users = new Users();
         Long userId = ShiroKit.getUserNotNull().getId();
         User user = this.userService.getById(userId);
-
-//        model.addAllAttributes(BeanUtil.beanToMap(users));
         model.addAttribute("roleName", ConstantFactory.me().getRoleName(users.getRoleId()));
         model.addAttribute("deptName", ConstantFactory.me().getDeptName(users.getDeptId()));
         LogObjectHolder.me().set(users);
@@ -244,7 +235,7 @@ public class SystemController extends BaseController {
 
         if (ToolUtil.isEmpty(avatar)) {
             throw new RequestEmptyException("请求头像为空");
-        }
+    }
 
         avatar = avatar.substring(avatar.indexOf(",") + 1);
 
@@ -306,7 +297,6 @@ public class SystemController extends BaseController {
     @RequestMapping("/currentUserInfo")
     @ResponseBody
     public ResponseData getUserInfo() {
-        Users users = new Users();
         ShiroUser currentUser = ShiroKit.getUser();
         if (currentUser == null) {
             throw new ServiceException(CoreExceptionEnum.NO_CURRENT_USER);
@@ -343,41 +333,4 @@ public class SystemController extends BaseController {
         return ResponseData.success(0, "上传成功", map);
     }
 
-//    @RequestMapping("/shenqing")
-//    @ResponseBody
-//    public ResponseData add(@Valid shenqing shenqing, BindingResult result) {
-//        Users users = new Users();
-//        String prize = shenqing.getPrize();
-//        Long userId = ShiroKit.getUserNotNull().getId();
-//        User user = this.userService.getById(userId);
-//        String account = user.getAccount();
-//        users.setPrize(prize);
-//        users.setAccount(account);
-//
-//        int repeat = stu_application.selectrepeat(users);
-//        System.out.println("查询记录:" + repeat);
-//        if (result.hasErrors()) {
-//            throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
-//        }
-//
-//        if (repeat >= 1) {
-//            throw new ServiceException(BizExceptionEnum.HASAPPLIED);
-//        } else {
-//            try {
-//                shenqing.setState("待审核");
-//                shenqing.setFudaoyuan("N");
-//                shenqing.setJiaowuchu("N");
-//                shenqing.setXueyuan("N");
-//                int num = stu_application.insert(shenqing);
-//                if (num == 0) {
-//                    throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
-//                }
-//            } catch (Exception e) {
-//                throw new ServiceException(BizExceptionEnum.SERVER_ERROR);
-//            }
-//        }
-//
-//
-//        return SUCCESS_TIP;
-//    }
 }

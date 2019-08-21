@@ -1,139 +1,77 @@
-@layout("/common/_container.html",{title:"申请",css:["/assets/modular/frame/user_info.css"],js:["/assets/modular/frame/shenqing.js"]}){
-
+@layout("/common/_container.html",{title:"申请",css:["/assets/modular/frame/user_info.css"],js:["/assets/modular/frame/console2.js"]}){
 <!-- 加载动画，移除位置在common.js中 -->
 <div class="page-loading">
     <div class="rubik-loader"></div>
 </div>
-
-<!-- 正文开始 -->
+<div class="layui-card-body" style="text-align: center;">
+    <h2 style="margin-top: 170px;margin-bottom: 20px;font-size: 28px;color: #91ADDC;">${welcomeTip}</h2>
+    <img src="${ctxPath}/assets/common/images/welcome.png" style="max-width: 100%;">
+</div>
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
-        <!-- 左 -->
-        <div class="layui-col-sm12 layui-col-md3">
-            <div class="layui-card">
-                <div class="layui-card-body" style="padding: 25px;">
-                    <div class="text-center layui-text">
-                        <div class="user-info-head" id="imgHead">
-                            <img src="${avatar}"/>
-                        </div>
-                        <h2 style="padding-top: 20px;">${name}</h2>
-                        <p style="padding-top: 8px;">${roleName!} ${deptName!}</p>
-                    </div>
-                    <div class="dash"></div>
-                </div>
+        <div class="layui-col-xs12 layui-col-sm6 layui-col-md3" id="zhuxuejin" onclick="toconsole2_edit()">
+            <div class="layui-card"  style="width: 300px;float: left">
+                <div class="layui-card-header">奖项：</div>
+                <div class="layui-card-body" id="zxj">助学金</div>
             </div>
-        </div>
-        <!-- 右 -->
-        <div class="layui-col-sm12 layui-col-md9">
-            <div class="layui-card">
-                <div class="layui-card-body layui-text">
-
-                    <div class="layui-tab layui-tab-brief" lay-filter="userInfoTab">
-                        <ul class="layui-tab-title">
-                            <li class="layui-this">基本信息</li>
-                        </ul>
-                        <div class="layui-tab-content">
-                            <div class="layui-form layui-tab-item layui-show" lay-filter="userInfoForm">
-                                <input type="hidden" name="userId"/>
-                                <div class="layui-form user-info-form" style="max-width: 400px;padding-top: 25px;">
-
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">学号:</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="account" class="layui-input" lay-verify="required" value="${account}"
-                                                   disabled/>
-                                        </div>
-                                    </div>
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">联系电话:</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="phone" class="layui-input" value="${phone}" disabled/>
-                                        </div>
-                                    </div>
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">系别:</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="xibie" class="layui-input" value="${xibie}" disabled/>
-                                        </div>
-                                    </div>
-
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">年级:</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="nianji" class="layui-input" value="${nianji}" disabled/>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">专业:</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="zhuanye" class="layui-input" value="${zhuanye}" disabled/>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">班级:</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="banji" class="layui-input" value="${banji}" disabled/>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">德育成绩:</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="dychengji" class="layui-input" value="${dychengji}" disabled/>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">体育成绩:</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="tychengji" class="layui-input" value="${tychengji}" disabled/>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">智育成绩:</label>
-                                        <div class="layui-input-block">
-                                            <input type="text" name="zychengji" class="layui-input" value="${zychengji}" disabled/>
-                                        </div>
-                                    </div>
-
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">奖项<span style="color: red;">*</span>:</label>
-                                        <div class="layui-input-block">
-                                            <input type="radio" name="prize" value="先进个人" title="先进个人">
-                                            <input type="radio" name="prize" value="国家奖学金" title="国家奖学金">
-                                            <input type="radio" name="prize" value="国家励志奖学金" title="国家励志奖学金">
-                                            <input type="radio" name="prize" value="国家助学金" title="国家助学金">
-                                            <input type="radio" name="prize" value="学院奖学金" title="学院奖学金">
-                                            <input type="radio" name="prize" value="社会奖资助" title="社会奖资助">
-                                            <input type="radio" name="prize" value="特困生资助" title="特困生资助">
-                                        </div>
-                                    </div>
-
-                                    <div class="layui-form-item">
-                                        <div class="layui-input-block">
-                                            <button class="layui-btn" lay-filter="userInfoSubmit" lay-submit>
-                                                提交
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
+            <div class="tu">
+                <img id="state" src="${ctxPath}/assets/expand/images/noaudit.png" style="width: 100%;height: 100%">
             </div>
         </div>
 
+        <div class="layui-col-xs12 layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">2</div>
+                <div class="layui-card-body">2</div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12 layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">3</div>
+                <div class="layui-card-body">3</div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12 layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">4</div>
+                <div class="layui-card-body">4</div>
+            </div>
+        </div>
     </div>
 </div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12 layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">1</div>
+                <div class="layui-card-body">1</div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12 layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">2</div>
+                <div class="layui-card-body">2</div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12 layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">3</div>
+                <div class="layui-card-body">3</div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12 layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">4</div>
+                <div class="layui-card-body">4</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @}

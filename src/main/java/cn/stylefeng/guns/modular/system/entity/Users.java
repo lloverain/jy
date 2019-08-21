@@ -1,8 +1,5 @@
 package cn.stylefeng.guns.modular.system.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
-
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -32,30 +29,6 @@ public class Users {
     private Date updateTime;
     private Long updateUser;
     private Integer version;
-//    private String xibie;
-//
-//    private String nianji;
-//
-//    private String zhuanye;
-//
-//    private String banji;
-//
-//    private double dychengji;
-//
-//    private double tychengji;
-//
-//    private double zychengji;
-//
-//    private String state;
-//
-//    private String prize;
-//
-//    private String fudaoyuan;
-//
-//    private String jiaowuchu;
-//
-//    private String xueyuan;
-
 
     @Override
     public String toString() {

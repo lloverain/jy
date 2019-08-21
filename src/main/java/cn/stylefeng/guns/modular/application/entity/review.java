@@ -1,34 +1,53 @@
 package cn.stylefeng.guns.modular.application.entity;
 
-public class Grant {
+/**
+ * @author 杨佳颖
+ * @version V1.0
+ * @Package cn.stylefeng.guns.modular.application.entity
+ * @date 2019/8/13 9:36
+ */
+public class review {
     private String studentId;           //学号
     private String name;                //姓名
     private String sex;                 //性别
     private String age;                 //年龄
-    private String idCart;              //身份证
     private String phone;               //电话
     private String address;             //地址
     private String politicalStatus;     //政治面貌
     private String familyAnnualIncome;  //家庭年收入
+    private String caption;             //证明材料图片的标题
     private Object image;               //证明材料图片
-    private String dept_id;             //区别班级，以后老师对自己对班级审核
+    private String deptId;             //区别班级，以后老师对自己对班级审核
     private String bonusType;           //奖金类型
+
+    private String instructor;          //辅导员审核
+    private String firstInstance;      //系领导
+    private String secondInstance;     //教务处
+    private String threeInstance;      //学院委员
+    private String fourInstance;       //学院领导
+    private String state;              //申请状态
 
     @Override
     public String toString() {
-        return "Grant{" +
+        return "review{" +
                 "studentId='" + studentId + '\'' +
                 ", name='" + name + '\'' +
                 ", sex='" + sex + '\'' +
                 ", age='" + age + '\'' +
-                ", idCart='" + idCart + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", politicalStatus='" + politicalStatus + '\'' +
                 ", familyAnnualIncome='" + familyAnnualIncome + '\'' +
+                ", caption='" + caption + '\'' +
                 ", image=" + image +
-                ", dept_id='" + dept_id + '\'' +
+                ", deptId='" + deptId + '\'' +
                 ", bonusType='" + bonusType + '\'' +
+                ", instructor='" + instructor + '\'' +
+                ", firstInstance='" + firstInstance + '\'' +
+                ", secondInstance='" + secondInstance + '\'' +
+                ", threeInstance='" + threeInstance + '\'' +
+                ", fourInstance='" + fourInstance + '\'' +
+                ", state='" + state + '\'' +
                 '}';
     }
 
@@ -64,14 +83,6 @@ public class Grant {
         this.age = age;
     }
 
-    public String getIdCart() {
-        return idCart;
-    }
-
-    public void setIdCart(String idCart) {
-        this.idCart = idCart;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -104,6 +115,14 @@ public class Grant {
         this.familyAnnualIncome = familyAnnualIncome;
     }
 
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
     public Object getImage() {
         return image;
     }
@@ -112,12 +131,12 @@ public class Grant {
         this.image = image;
     }
 
-    public String getDept_id() {
-        return dept_id;
+    public String getDeptId() {
+        return deptId;
     }
 
-    public void setDept_id(String dept_id) {
-        this.dept_id = dept_id;
+    public void setDeptId(String deptId) {
+        this.deptId = deptId;
     }
 
     public String getBonusType() {
@@ -126,5 +145,53 @@ public class Grant {
 
     public void setBonusType(String bonusType) {
         this.bonusType = bonusType;
+    }
+
+    public String getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(String instructor) {
+        this.instructor = instructor;
+    }
+
+    public String getFirstInstance() {
+        return firstInstance;
+    }
+
+    public void setFirstInstance(String firstInstance) {
+        this.firstInstance = firstInstance;
+    }
+
+    public String getSecondInstance() {
+        return secondInstance;
+    }
+
+    public void setSecondInstance(String secondInstance) {
+        this.secondInstance = secondInstance;
+    }
+
+    public String getThreeInstance() {
+        return threeInstance;
+    }
+
+    public void setThreeInstance(String threeInstance) {
+        this.threeInstance = threeInstance;
+    }
+
+    public String getFourInstance() {
+        return fourInstance;
+    }
+
+    public void setFourInstance(String fourInstance) {
+        this.fourInstance = fourInstance;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

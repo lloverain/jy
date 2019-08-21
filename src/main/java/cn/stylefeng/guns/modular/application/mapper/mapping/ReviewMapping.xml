@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.stylefeng.guns.modular.application.mapper.ReviewMapper">
+    <resultMap id="review" type="cn.stylefeng.guns.modular.application.entity.review">
+        <id column="studentId" property="student_id"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="phone" property="phone"/>
+        <result column="address" property="address"/>
+        <result column="politicalStatus" property="political_status"/>
+        <result column="familyAnnualIncome" property="familyAnnualIncome"/>
+        <result column="image" property="image"/>
+        <result column="deptId" property="dept_id"/>
+        <result column="bonusType" property="bonus_type"/>
+        <result column="instructor" property="Instructor"/>
+        <result column="firstInstance" property="first_instance"/>
+        <result column="secondInstance" property="second_instance"/>
+        <result column="threeInstance" property="three_instance"/>
+        <result column="fourInstance" property="four_instance"/>
+        <result column="state" property="state"/>
+    </resultMap>
+
+    <select id="selectAllStudentsReview" resultType="cn.stylefeng.guns.modular.application.entity.review">
+        select * from student_grant
+<!--        <if test="dept_id != null and dept_id!=''">-->
+<!--            where dept_id = #{dept_id}-->
+<!--        </if>-->
+
+                <choose>
+                    <when test="dept_id != null and dept_id !=''">
+                        where dept_id = #{dept_id}
+                    </when>
+                    <otherwise>
+                        where (dept_id  REGEXP'[^0-9.]')=0
+                    </otherwise>
+                </choose>
+
+        <if test="studentId != null and studentId != ''">
+            where student_id like concat(concat('%',#{studentId}),'%')
+        </if>
+        <if test="name !=null and name != ''">
+            where name like concat(concat('%',#{name}),'%')
+        </if>
+
+        <if test="instructor !=null and instructor!=''">
+            and Instructor = #{instructor}
+        </if>
+
+        <if test="firstInstance !=null and firstInstance!=''">
+            and first_instance = #{firstInstance}
+        </if>
+        <if test="secondInstance !=null and secondInstance!=''">
+            and second_instance = #{secondInstance}
+        </if>
+        <if test="threeInstance !=null and threeInstance!=''">
+            and three_instance = #{threeInstance}
+        </if>
+        <if test="fourInstance !=null and fourInstance!=''">
+            and four_instance = #{fourInstance}
+        </if>
+        <if test="state !=null and state !=''">
+            and state = #{state}
+        </if>
+    </select>
+
+    <select id="selectImage" resultType="java.lang.String">
+        select image from student_grant where student_id = #{studentId} and bonus_type = #{bonusType}
+    </select>
+
+    <delete id="deletereview">
+        delete from student_grant where student_id = #{studentId} and bonus_type = #{bonusType}
+    </delete>
+
+    <update id="toExamine">
+         update student_grant set
+        <if test="instructor !=null and instructor!=''">
+            Instructor = #{instructor}
+        </if>
+        <if test="firstInstance !=null and firstInstance!=''">
+            first_instance = #{firstInstance}
+        </if>
+        <if test="secondInstance !=null and secondInstance!=''">
+            second_instance = #{secondInstance}
+        </if>
+        <if test="threeInstance !=null and threeInstance!=''">
+            three_instance = #{threeInstance}
+        </if>
+        <if test="fourInstance !=null and fourInstance!=''">
+            four_instance = #{fourInstance}
+        </if>
+        <if test="state !=null and state !=''">
+            ,state = #{state}
+        </if>
+        where student_id = #{studentId} and bonus_type=#{bonusType}
+    </update>
+
+    <update id="nopass">
+        update student_grant set Instructor = 'F',first_instance = 'F',second_instance = 'F',
+        second_instance = 'F',three_instance = 'F',four_instance = 'F',state = '2'
+         where student_id=#{studentId} and bonus_type = #{bonusType}
+    </update>
+</mapper>
