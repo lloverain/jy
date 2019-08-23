@@ -3,7 +3,9 @@ package cn.stylefeng.guns.modular.application.service;
 import cn.stylefeng.guns.core.common.page.LayuiPageFactory;
 import cn.stylefeng.guns.modular.application.entity.review;
 import cn.stylefeng.guns.modular.application.mapper.ReviewMapper;
+import cn.stylefeng.guns.modular.system.entity.Notice;
 import cn.stylefeng.guns.modular.system.entity.User;
+import cn.stylefeng.guns.modular.system.service.NoticeService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * @author 杨佳颖
@@ -22,6 +26,9 @@ import org.springframework.stereotype.Service;
 public class ReviewService extends ServiceImpl<ReviewMapper, review> {
     @Autowired
     private ReviewMapper reviewMapper;
+
+    @Autowired
+    private NoticeService noticeService;
 
     private static Logger logger = LoggerFactory.getLogger(ReviewMapper.class);
 
@@ -94,6 +101,13 @@ public class ReviewService extends ServiceImpl<ReviewMapper, review> {
             return reviewMapper.toExamine(studentId,bonusType,null,null,null,"T",null,"3");
         }else if("1160733692717281281".equals(role)){
             //学院领导
+            Notice notice = new Notice();
+            notice.setTitle("管理员");
+            notice.setContent("助学金审核通过！");
+            notice.setCreateUser(Long.valueOf(1));
+            notice.setJurisdiction("1");
+            notice.setCreateTime(new Date());
+            this.noticeService.save(notice);
             return reviewMapper.toExamine(studentId,bonusType,null,null,null,null,"T","1");
         }
         return 0;

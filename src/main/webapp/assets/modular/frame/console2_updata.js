@@ -18,7 +18,6 @@ layui.use(['form', 'upload', 'element', 'ax', 'laydate'],function () {
     var path = result;
     $("#preview").attr('src',path);
     $("#text").html("已上传");
-
     //表单提交事件
     form.on('submit(userInfoSubmit)', function (data) {
         form.val('userInfoForm', result.data);
@@ -34,6 +33,7 @@ layui.use(['form', 'upload', 'element', 'ax', 'laydate'],function () {
         ajax.set(data.field);
         ajax.set("image",tu);
         ajax.start();
+
     });
 });
 

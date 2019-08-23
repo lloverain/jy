@@ -121,6 +121,7 @@ public class NoticeController extends BaseController {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
         notice.setCreateUser(ShiroKit.getUserNotNull().getId());
+        notice.setJurisdiction("1");
         notice.setCreateTime(new Date());
         this.noticeService.save(notice);
         return SUCCESS_TIP;

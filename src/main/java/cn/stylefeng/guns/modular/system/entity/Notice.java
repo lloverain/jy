@@ -60,6 +60,11 @@ public class Notice implements Serializable {
     @TableField(value = "update_user", fill = FieldFill.UPDATE)
     private Long updateUser;
 
+    /**
+     * 权限通知
+     */
+    @TableField(value = "jurisdiction",fill = FieldFill.INSERT )
+    private String jurisdiction;
 
     public Long getNoticeId() {
         return noticeId;
@@ -117,16 +122,25 @@ public class Notice implements Serializable {
         this.updateUser = updateUser;
     }
 
+    public String getJurisdiction() {
+        return jurisdiction;
+    }
+
+    public void setJurisdiction(String jurisdiction) {
+        this.jurisdiction = jurisdiction;
+    }
+
     @Override
     public String toString() {
         return "Notice{" +
-        "noticeId=" + noticeId +
-        ", title=" + title +
-        ", content=" + content +
-        ", createTime=" + createTime +
-        ", createUser=" + createUser +
-        ", updateTime=" + updateTime +
-        ", updateUser=" + updateUser +
-        "}";
+                "noticeId=" + noticeId +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createTime=" + createTime +
+                ", createUser=" + createUser +
+                ", updateTime=" + updateTime +
+                ", updateUser=" + updateUser +
+                ", jurisdiction='" + jurisdiction + '\'' +
+                '}';
     }
 }

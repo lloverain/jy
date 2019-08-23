@@ -105,25 +105,6 @@ public class SystemController extends BaseController {
     }
 
     /**
-     * 分析页面
-     *
-     * @author fengshuonan
-     * @Date 2018/12/24 22:43
-     */
-//    @RequestMapping("/console2")
-//    public String console2(Model model) {
-//        Users users = new Users();
-//        Long userId = ShiroKit.getUserNotNull().getId();
-//        User user = this.userService.getById(userId);
-//
-//        model.addAllAttributes(BeanUtil.beanToMap(user));
-//        model.addAttribute("roleName", ConstantFactory.me().getRoleName(user.getRoleId()));
-//        model.addAttribute("deptName", ConstantFactory.me().getDeptName(user.getDeptId()));
-//        LogObjectHolder.me().set(user);
-//        return "/modular/frame/console2.html";
-//    }
-
-    /**
      * 跳转到首页通知
      *
      * @author fengshuonan
@@ -131,7 +112,10 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("/notice")
     public String hello() {
-        List<Notice> notices = noticeService.list();
+        Long userId = ShiroKit.getUserNotNull().getId();
+        String jurisdiction = String.valueOf(userId);
+//        List<Notice> notices = noticeService.list();
+        List<Notice> notices = noticeService.noticeList(jurisdiction);
         super.setAttr("noticeList", notices);
         return "/modular/frame/notice.html";
     }

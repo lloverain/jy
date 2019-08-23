@@ -15,7 +15,8 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        notice_id AS "noticeId", title AS "title", content AS "content", create_time AS "createTime", create_user AS "createUser", update_time AS "updateTime", update_user AS "updateUser"
+        notice_id AS "noticeId", title AS "title", content AS "content", create_time AS "createTime", create_user AS "createUser",
+         update_time AS "updateTime", update_user AS "updateUser",jurisdiction AS "jurisdiction"
     </sql>
 
     <select id="list" resultType="map">
@@ -23,8 +24,24 @@
         <include refid="Base_Column_List"></include>
         from sys_notice
         <if test="condition != null and condition != ''">
-            where title like CONCAT('%',#{condition},'%') or content like CONCAT('%',#{condition},'%')
+            and title like CONCAT('%',#{condition},'%') or content like CONCAT('%',#{condition},'%')
         </if>
+
+        order by create_time DESC
+    </select>
+
+    <select id="noticelist" resultType="cn.stylefeng.guns.modular.system.entity.Notice">
+        select
+        <include refid="Base_Column_List"></include>
+        from sys_notice
+        <choose>
+            <when test="jurisdiction!=null and jurisdiction != ''">
+                where jurisdiction in ('1',#{jurisdiction})
+            </when>
+            <otherwise>
+                where jurisdiction = '1'
+            </otherwise>
+        </choose>
         order by create_time DESC
     </select>
 

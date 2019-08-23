@@ -77,8 +77,7 @@ public class GrantService extends ServiceImpl<GrantMapper, Grant> {
         if(!grant.getFamilyAnnualIncome().equals(stu.getFamilyAnnualIncome())){
             grant.setFamilyAnnualIncome(stu.getFamilyAnnualIncome());
         }
-        String tu = reviewService.selectImage(grant.getStudentId(),grant.getBonusType());
-        if(tu.equals(image)){
+        if(image==null || "".equals(image)){
             return grantMapper.updatagrant(grant);
         }else {
             grant.setImage(image);
