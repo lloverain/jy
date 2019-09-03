@@ -13,11 +13,21 @@
         <result column="politicalStatus" property="political_status"/>
     </resultMap>
 
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        student_id AS "studentId", name AS "name", sex AS "sex", age AS "age", id_cart AS "idCart", phone AS "phone", address AS "address", political_status AS "political_status", dept_id AS "deptId"
+    </sql>
+
+    <sql id="Query_Dept_Id">
+        <if test="deptId != null and deptId != 0">
+            and (dept_id = #{deptId} or dept_id in ( select dept_id from sys_dept where pids like CONCAT('%$[', #{deptId}, '$]%') escape '$' ))
+        </if>
+    </sql>
+
     <!-- 导入一群学生 -->
     <insert id="importStudent" parameterType="java.util.List">
-
         replace into student_info
-        (student_id,name,sex,age,id_cart,phone,address,political_status)
+        (student_id,name,sex,age,id_cart,phone,address,political_status,dept_id)
         values
         <foreach collection="list" item="student" index="index" separator=",">
             (
@@ -28,19 +38,27 @@
             #{student.idCart},
             #{student.phone},
             #{student.address},
-            #{student.politicalStatus}
+            #{student.politicalStatus},
+            #{student.deptId}
             )
         </foreach>
     </insert>
     <!--查询学生信息-->
+    <!-- student_id,name,sex,age,id_cart,phone,address,political_status,dept_id -->
     <select id="selectStudent" resultType="cn.stylefeng.guns.modular.student.entity.Student">
-        select student_id,name,sex,age,id_cart,phone,address,political_status from student_info
+        select
+         <include refid="Base_Column_List"/>
+         from student_info
+        where 1 = 1
 
         <if test="studentId != null and studentId != ''">
-            where student_id = #{studentId}
+            and student_id = #{studentId}
         </if>
         <if test="name != null and name != ''">
-            where name like concat(concat('%',#{name}),'%')
+            and name like concat(concat('%',#{name}),'%')
+        </if>
+        <if test="deptId != null and deptId != 0">
+            and (dept_id = #{deptId} or dept_id in ( select dept_id from sys_dept where pids like CONCAT('%$[', #{deptId}, '$]%') escape '$' ))
         </if>
 
     </select>

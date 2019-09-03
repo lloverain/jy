@@ -1,15 +1,23 @@
 package cn.stylefeng.guns.modular.student.controller;
 
 
+import cn.stylefeng.guns.core.common.annotion.Permission;
+import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.common.page.LayuiPageFactory;
+import cn.stylefeng.guns.core.common.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.student.entity.Student;
 import cn.stylefeng.guns.modular.student.service.StudentService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.datascope.DataScope;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.RequestEmptyException;
+import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +35,14 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
  * @author FM
  * @date 2019/7/22 21:47
  * <p>
- * 学生信息穿
+ * 学生信息
  */
 
 @Controller
@@ -55,6 +64,11 @@ public class StudentController extends BaseController {
     @RequestMapping("/studentMgr")
     public String studentImAndEx() {
         logger.debug("进入学生管理页面");
+        List<Long> deptDataScope = ShiroKit.getDeptDataScope();
+        for (Long aLong : deptDataScope) {
+            logger.debug(aLong + "部门id");
+        }
+
         return ROOTS + "studentMgr.html";
     }
 
@@ -73,7 +87,12 @@ public class StudentController extends BaseController {
 
         JSONObject jsonObject = new JSONObject();
 
-        if (studentService.importstudent(studentFile)) {
+        //取到用户部门及子部门号
+        List<Long> deptDataScope = ShiroKit.getDeptDataScope();
+        //判断用户是不是辅导员 只有辅导员才能使用批量导入
+        if (deptDataScope.size() > 1) {
+            jsonObject.put("code","userNo");
+        }else if (studentService.importstudent(studentFile,deptDataScope.get(0))) {
             jsonObject.put("code", "ok");
             logger.debug("导入成功");
             return jsonObject.toString();
@@ -92,24 +111,29 @@ public class StudentController extends BaseController {
      */
     @ResponseBody
     @RequestMapping("/selectAllStudent")
-    public Object selectAllStudent(@RequestParam(required = false) String basis) {
+    public Object selectAllStudent(@RequestParam(required = false) String basis,@RequestParam(required = false) Long deptId ) {
+
+        logger.debug("条件部门id:" + deptId);
 
         IPage page = null;
         if (basis == null) {
-            page = studentService.selectAllStudentPage();
+            //限制部门
+            DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope());
+            page = studentService.selectAllStudentPage(dataScope,deptId);
         } else {
             String regular = "^[0-9][0-9]*$";
             String studentId = null;
             String name = null;
-            if (Pattern.matches(regular, basis)){
+            if (Pattern.matches(regular, basis)) {
                 logger.debug("学号是：" + basis);
                 studentId = basis;
-            }else {
+            } else {
                 logger.debug("姓名是：" + basis);
                 name = basis;
             }
-           page = studentService.fuzzyQuery(studentId, name);
-
+            //限制部门
+            DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope());
+            page = studentService.fuzzyQuery(studentId, name,dataScope,deptId);
         }
 
         return LayuiPageFactory.createPageInfo(page);
@@ -137,10 +161,22 @@ public class StudentController extends BaseController {
     @RequestMapping("/editStudent")
     public String editStudent(@RequestParam String studentId) {
 
-        Student student = studentService.selectOneStudent(studentId);
+        DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope());
+
+        Student student = studentService.selectOneStudent(studentId,dataScope);
         LogObjectHolder.me().set(student);
         logger.debug("跳转编辑页面");
         return ROOTS + "student/student_edit.html";
+    }
+
+    /**
+     * 跳转添加页面
+     */
+    @RequestMapping("/addStudentPage")
+    public String addStudentPage() {
+
+        logger.debug("跳转添加页面");
+        return ROOTS + "student/student_add.html";
     }
 
     /**
@@ -184,6 +220,28 @@ public class StudentController extends BaseController {
     }
 
     /**
+     * 添加单个学生
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/addStudent")
+    public Object addStudent(@Valid Student student) throws SQLIntegrityConstraintViolationException {
+
+        logger.debug("上传部门id" + student.getDeptId());
+
+        //用户部门范围
+        List<Long> dataScope = ShiroKit.getDeptDataScope();
+
+        if (!dataScope.contains(student.getDeptId())){
+           throw new ServiceException(BizExceptionEnum.NO_PERMITION);
+        }
+
+        studentService.addStudent(student);
+        return SUCCESS_TIP;
+    }
+
+    /**
      * 得到学生详细信息
      *
      * @return
@@ -197,7 +255,10 @@ public class StudentController extends BaseController {
             throw new RequestEmptyException();
         }
 
-        Student student = studentService.selectOneStudent(studentId);
+        //限制部门
+        DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope());
+
+        Student student = studentService.selectOneStudent(studentId,dataScope);
         HashMap<String, String> map = new HashMap<>();
         map.put("studentId", studentId);
         map.put("name", student.getName());

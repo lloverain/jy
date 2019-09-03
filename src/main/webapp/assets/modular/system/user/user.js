@@ -256,7 +256,6 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
 
         var userId = obj.elem.value;
         var checked = obj.elem.checked ? true : false;
-
         MgrUser.changeUserStatus(userId, checked);
     });
 
