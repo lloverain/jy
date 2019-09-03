@@ -15,6 +15,15 @@ public class Student {
     private String phone;
     private String address;
     private String politicalStatus;    //政治面貌
+    private Long deptId;    //部门id
+
+    public Long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
+    }
 
     @Override
     public String toString() {

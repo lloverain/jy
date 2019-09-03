@@ -4,6 +4,7 @@ import cn.stylefeng.guns.core.common.page.LayuiPageFactory;
 import cn.stylefeng.guns.modular.student.entity.Student;
 
 import cn.stylefeng.guns.modular.student.mapper.StudentMapper;
+import cn.stylefeng.roses.core.datascope.DataScope;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -45,10 +46,11 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
      *
      * @return
      */
-    public IPage selectAllStudentPage() {
+    public IPage selectAllStudentPage(DataScope scope,Long deptId) {
         logger.debug("开始查询所有学生......");
         Page page = LayuiPageFactory.defaultPage();
-        return page.setRecords(studentMapper.selectStudent(page,null,null));
+        logger.debug(deptId + "又是部门id");
+        return page.setRecords(studentMapper.selectStudent(page,scope,null,null,deptId));
     }
 
     /**
@@ -57,10 +59,10 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
      * @param name
      * @return
      */
-    public IPage fuzzyQuery(String studentId,String name){
+    public IPage fuzzyQuery(String studentId, String name, DataScope scope,Long deptId){
         logger.debug("开始模糊查询....");
         Page page = LayuiPageFactory.defaultPage();
-        return page.setRecords(studentMapper.selectStudent(page,studentId,name));
+        return page.setRecords(studentMapper.selectStudent(page,scope,studentId,name,deptId));
     }
 
     /**
@@ -68,9 +70,9 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
      *
      * @return
      */
-    public Student selectOneStudent(String studentId) {
+    public Student selectOneStudent(String studentId,DataScope scope) {
         logger.debug("开始查询单个学生....");
-        return studentMapper.selectStudent(null,studentId,null).get(0);
+        return studentMapper.selectStudent(null,scope,studentId,null,null).get(0);
     }
 
     /**
@@ -107,6 +109,15 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
         );
     }
 
+    /**
+     * 添加单个学生
+     */
+    public int addStudent(Student student) throws SQLIntegrityConstraintViolationException {
+
+        List<Student> list = new ArrayList<>();
+        list.add(student);
+        return studentMapper.importStudent(list);
+    }
 
     /**
      * 将学生信息导入到数据库
@@ -114,7 +125,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
      * @param file
      * @return
      */
-    public boolean importstudent(MultipartFile file) throws SQLIntegrityConstraintViolationException, DataAccessException, IOException {
+    public boolean importstudent(MultipartFile file,Long id) throws SQLIntegrityConstraintViolationException, DataAccessException, IOException {
 
         logger.debug("执行导入操作......");
         checkFile(file);
@@ -163,6 +174,7 @@ public class StudentService extends ServiceImpl<StudentMapper, Student> {
                 }
                 //取到一行
                 Student student = exclToStudent(cells);
+                student.setDeptId(id);
                 list.add(student);
                 logger.debug("将一行数据添加进集合.....");
             }

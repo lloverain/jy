@@ -14,8 +14,18 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
     var MgrStudent = {
         tableId: "studentTable",    //表格id
         condition: {
-            name: ""
+            name: "",
+            deptId: ""
         }
+    };
+
+    /**
+     * 选择部门时
+     */
+    MgrStudent.onClickDept = function (e, treeId, treeNode) {
+        MgrStudent.condition.deptId = treeNode.id;
+        console.log(treeNode.id + "部门id");
+        MgrStudent.search();
     };
 
     /**
@@ -41,10 +51,29 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
      * 点击查询按钮
      */
     MgrStudent.search = function () {
-        table.reload(MgrStudent.tableId,{
-            where:{'basis':$("#name").val()}
+        table.reload(MgrStudent.tableId, {
+            where: {'basis': $("#name").val(),'deptId':MgrStudent.condition.deptId}
         });
     };
+
+
+    /**
+     * 点击添加按钮
+     */
+
+    MgrStudent.add = function () {
+
+        admin.putTempData('formOk', false);
+        top.layui.admin.open({
+            type: 2,
+            title: '添加学生',
+            content: Feng.ctxPath + '/student/addStudentPage',
+            end: function () {
+                admin.getTempData('formOk') && table.reload(MgrStudent.tableId);
+            }
+        });
+
+    }
 
 
     /**
@@ -66,7 +95,6 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
      */
     MgrStudent.onEditUser = function (data) {
         admin.putTempData('formOk', false);
-
         top.layui.admin.open({
             type: 2,
             title: '编辑用户',
@@ -100,7 +128,6 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
     let loads;
     //上传导入文件
     upload.render({
-
         elem: '#btnImp',
         url: Feng.ctxPath + '/student/import',
         acceptMime: 'file/xlsx, file/xls',
@@ -109,16 +136,22 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
             loads = layer.load();
         },
         done: function (res) {
+            if (res.code === "userNo") {
+                layer.close(loads);
+                layer.msg("只有辅导员才可以批量导入")
+            }
             if (res.code === "ok") {
                 layer.close(loads);
                 layer.msg("导入成功")
                 table.reload(MgrStudent.tableId)
-            } else {
+            }
+            if (res.code === "no") {
                 layer.close(loads);
                 layer.msg("导入失败")
             }
         },
         error: function () {
+            layer.close(loads);
             layer.msg("导入出错")
         }
     })
@@ -133,12 +166,11 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
         cols: MgrStudent.initColumn()
     });
 
-    //渲染时间选择框
-    laydate.render({
-        elem: '#timeLimit',
-        range: true,
-        max: Feng.currentDate()
-    });
+
+    //初始化左侧部门树
+    var ztree = new $ZTree("deptTree", "/dept/tree");
+    ztree.bindOnClick(MgrStudent.onClickDept);
+    ztree.init();
 
 
     // 搜索按钮点击事件
@@ -147,13 +179,18 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
     });
 
     // 导入按钮点击事件
-    $('#btnImp').click(function () {
-        MgrStudent.importExcel();
-    });
+   // $('#btnImp').click(function () {
+       // MgrStudent.importExcel();
+   // });
 
     // 导出excel
     $('#btnExp').click(function () {
         MgrStudent.exportExcel();
+    });
+
+    //添加单个学生
+    $('#btnAdd').click(function () {
+        MgrStudent.add();
     });
 
     // 工具条点击事件
