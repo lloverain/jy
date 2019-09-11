@@ -37,13 +37,12 @@ layui.use(['form', 'upload', 'element', 'ax', 'laydate'], function () {
 
 
 function toconsole2_edit(){
-
     var ajax = new layui.ax(Feng.ctxPath + "/application/selectReview",
         function (data) {
             if(data===0){
                 top.layui.admin.open({
                     type: 2,
-                    area: ['1000px', '900px'],
+                    area: ['80%', '90%'],
                     shadeClose: false, //点击遮罩关闭
                     offset:'auto',//垂直水平居中
                     title: zxj.innerText,
@@ -60,7 +59,7 @@ function toconsole2_edit(){
 
                 top.layui.admin.open({
                     type: 2,
-                    area: ['1000px', '900px'],
+                    area: ['80%', '90%'],
                     shadeClose: false, //点击遮罩关闭
                     offset:'auto',//垂直水平居中
                     title: zxj.innerText,

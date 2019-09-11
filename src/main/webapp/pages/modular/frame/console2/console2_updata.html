@@ -19,93 +19,238 @@
                         <div class="layui-tab-content">
                             <div class="layui-form layui-tab-item layui-show" lay-filter="userInfoForm">
                                 <input type="hidden" name="userId"/>
-                                <div class="layui-form user-info-form" style="max-width: 400px;padding-top: 25px;">
-
+                                <form class="user-info-form" id="form_update" enctype="multipart/form-data" method="post"
+                                      style="max-width: 400px;padding-top: 25px;">
+                                    <!--学号-->
                                     <div class="layui-form-item">
                                         <label class="layui-form-label">学号:</label>
                                         <div class="layui-input-block">
-                                            <input type="text" name="studentId" class="layui-input" lay-verify="required" value="${studentId}"
-                                                   disabled/>
+                                            <input type="text" name="studentId" class="layui-input" value="${studentId}" disabled
+                                                   lay-verify="required"/>
                                         </div>
-                                    </div>
 
+                                    </div>
+                                    <!--姓名-->
                                     <div class="layui-form-item">
                                         <label class="layui-form-label">姓名:</label>
                                         <div class="layui-input-block">
-                                            <input type="text" name="xingming" class="layui-input" value="${xingming}" disabled/>
+                                            <input type="text" name="studentName" class="layui-input"
+                                                   lay-verify="required"/>
                                         </div>
                                     </div>
-
+                                    <!--性别-->
                                     <div class="layui-form-item">
                                         <label class="layui-form-label">性别:</label>
                                         <div class="layui-input-block">
-                                            <input type="text" name="xingbie" class="layui-input" value="${xingbie}" disabled/>
+                                            <input type="radio" name="sex" id="man" value="男" title="男" class="layui-input"/>
+                                            <input type="radio" name="sex" id="woman" value="女" title="女" class="layui-input"/>
                                         </div>
                                     </div>
-
+                                    <!--年龄-->
                                     <div class="layui-form-item">
                                         <label class="layui-form-label">年龄:</label>
                                         <div class="layui-input-block">
-                                            <input type="text" name="age" class="layui-input" value="${age}" disabled/>
+                                            <input type="number" name="age" class="layui-input" value="${age}" lay-verify="required|number"/>
                                         </div>
                                     </div>
-
+                                    <!--民族-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">民族:</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="famousRace" class="layui-input"/>
+                                        </div>
+                                    </div>
+                                    <!--政治面貌-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">政治面貌:</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="politicalStatus" class="layui-input"/>
+                                        </div>
+                                    </div>
+                                    <!--身份证-->
                                     <div class="layui-form-item">
                                         <label class="layui-form-label">身份证:</label>
                                         <div class="layui-input-block">
-                                            <input type="text" name="idCart" class="layui-input" value="${idCart}" disabled/>
+                                            <input type="text" name="idCart" class="layui-input" value="${idCart}"
+                                                   lay-verify="identity|required"/>
                                         </div>
                                     </div>
-
+                                    <!--联系电话-->
                                     <div class="layui-form-item">
                                         <label class="layui-form-label">联系电话:</label>
                                         <div class="layui-input-block">
-                                            <input type="text" name="phone" class="layui-input" value="${phone}" disabled/>
+                                            <input type="text" name="phone" class="layui-input" value="${phone}"
+                                                   lay-verify="phone|required"/>
                                         </div>
                                     </div>
-
+                                    <!--地址-->
                                     <div class="layui-form-item">
                                         <label class="layui-form-label">地址:</label>
                                         <div class="layui-input-block">
-                                            <input type="text" name="address" class="layui-input" value="${address}" disabled/>
+                                            <input type="text" name="address" class="layui-input"
+                                                   lay-verift="required"/>
                                         </div>
                                     </div>
-
+                                    <!--学分绩点-->
                                     <div class="layui-form-item">
-                                        <label class="layui-form-label">面貌:</label>
-                                        <div class="layui-input-block layui-form" >
-                                            <input type="text" name="politicalStatus" class="layui-input" value="${politicalStatus}" disabled/>
+                                        <label class="layui-form-label">学分绩点:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="text" name="gradePoint" class="layui-input"
+                                                   lay-verify="number|required"/>
+                                        </div>
+                                    </div>
+                                    <!--职业教育应修学分-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">职业教育应修学分:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="text" name="vocationalEducationCredits" class="layui-input"
+                                                   lay-verify="number|required"/>
+                                        </div>
+                                    </div>
+                                    <!--品学量化分-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">品学量化分:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="text" name="quantitativeCredit" class="layui-input"
+                                                   lay-verify="number|required"/>
+                                        </div>
+                                    </div>
+
+                                    <!--父亲姓名-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">父亲姓名:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="text" name="fatherName" class="layui-input"
+                                                   lay-verify="required"/>
+                                        </div>
+                                    </div>
+
+                                    <!--父亲年龄-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">父亲年龄:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="number" name="fatherAge" class="layui-input"
+                                                   lay-verify="number|required"/>
                                         </div>
                                     </div>
 
 
+                                    <!--父亲电话-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">父亲电话:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="text" name="fatherPhone" class="layui-input"
+                                                   lay-verify="phone|required"/>
+                                        </div>
+                                    </div>
+
+                                    <!--父亲劳动单位-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">父亲劳动单位:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="text" name="fatherCompany" class="layui-input"
+                                                   lay-verify="required"/>
+                                        </div>
+                                    </div>
+                                    <!--父亲月收入-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">父亲月收入:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="number" name="fatherMonthlyIncome" class="layui-input"
+                                                   lay-verify="number|required"/>
+                                        </div>
+                                    </div>
+                                    <!--母亲姓名-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">母亲姓名:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="text" name="motherName" class="layui-input"
+                                                   lay-verify="required"/>
+                                        </div>
+                                    </div>
+                                    <!--母亲年龄-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">母亲年龄:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="number" name="motherAge" class="layui-input"
+                                                   lay-verify="number|required"/>
+                                        </div>
+                                    </div>
+                                    <!--母亲电话-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">母亲电话:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="text" name="motherPhone" class="layui-input"
+                                                   lay-verify="phone|required"/>
+                                        </div>
+                                    </div>
+                                    <!--母亲劳动单位-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">母亲劳动单位:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="text" name="motherCompany" class="layui-input"
+                                                   lay-verify="required"/>
+                                        </div>
+                                    </div>
+                                    <!--母亲月收入-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">母亲月收入:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="number" name="motherMonthlyIncome" class="layui-input"
+                                                   lay-verify="number|required"/>
+                                        </div>
+                                    </div>
+                                    <!--家庭户口-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">家庭户口:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="radio" name="familyAccount" id="chengzhen" value="城镇" title="城镇" checked
+                                                   class="layui-input"/>
+                                            <input type="radio" name="familyAccount" id="nongcun" value="农村" title="农村"
+                                                   class="layui-input"/>
+                                        </div>
+                                    </div>
+                                    <!--家庭人数-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">家庭人数:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input type="number" name="familyNumbs" class="layui-input"
+                                                   lay-verify="number|required"/>
+                                        </div>
+                                    </div>
+
+                                    <!--申请理由-->
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">申请理由:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <textarea name="applyReason" required lay-verify="required" placeholder="请输入"
+                                                      class="layui-textarea"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!--证明材料-->
                                     <div class="layui-form-item">
                                         <label class="layui-form-label">证明材料:</label>
                                         <div class="layui-input-block">
-                                            <img id="preview"/><br/>
-                                            <label for="fileinp">
-                                                <input type="button" id="btn" value="点我重新上传"><span id="text">请上传图片</span>
-                                                <input type="file" name="file" id="file" accept=".png,.jpg,.jpeg" onchange="imgPreview(this)" class="layui-input"/>
+                                            <!--                                            <img id="preview"/><br/>-->
+                                            <label>
+                                                <input type="button" id="btn" value="点我上传">
+                                                <!--                                                <span id="text">请上传</span>-->
+                                                <input type="file" name="material" id="file" lay-verify="required" multiple
+                                                       class="layui-input"/>
                                             </label>
                                         </div>
                                     </div>
 
-
-                                    <div class="layui-form-item">
-                                        <label class="layui-form-label">家庭收入:</label>
-                                        <div class="layui-input-block layui-form" >
-                                            <input type="text" name="familyAnnualIncome" class="layui-input" value="${familyAnnualIncome}" lay-verify="required|number"/>
-                                        </div>
-                                    </div>
-
+                                    <!--提交-->
                                     <div class="layui-form-item">
                                         <div class="layui-input-block">
-                                            <button class="layui-btn" lay-filter="userInfoSubmit" id="submit" lay-submit>
+                                            <button type="button" class="layui-btn" id="submit" onclick="update()">
                                                 更新并提交
                                             </button>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
 
                         </div>
@@ -117,4 +262,24 @@
 
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="application/javascript">
+    choice();
+    function choice() {
+        var sex = "${sex}";
+        var familyAccount = "${familyAccount}";
+        if(sex === "男"){
+            var man = $("#man").attr("checked",'checked');
+        }else {
+            var man = $("#woman").attr("checked",'checked');
+        }
+
+        if(familyAccount === "城镇"){
+            var chengzhen = $("#chengzhen").attr("checked",'checked');
+        }
+        if(familyAccount === "农村"){
+            var nongcun = $("#nongcun0").attr("checked",'checked');
+        }
+    }
+</script>
 @}

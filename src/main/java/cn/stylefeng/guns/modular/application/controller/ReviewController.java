@@ -3,12 +3,16 @@ package cn.stylefeng.guns.modular.application.controller;
 import cn.stylefeng.guns.core.common.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
+import cn.stylefeng.guns.modular.application.service.GrantService;
 import cn.stylefeng.guns.modular.application.service.ReviewService;
+import cn.stylefeng.guns.modular.application.util.AGrantUtil;
+import cn.stylefeng.guns.modular.student.entity.Stu;
 import cn.stylefeng.guns.modular.system.entity.User;
 import cn.stylefeng.guns.modular.system.service.UserService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +23,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sun.misc.BASE64Decoder;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @author 杨佳颖
@@ -38,67 +50,143 @@ public class ReviewController extends BaseController {
     private UserService userService;
 
     @Autowired
+    private GrantService grantService;
+
+    @Autowired
     private ReviewService reviewService;
 
     private static String ROOTS = "/modular/review/";
 
     /**
      * 进入审核页面
+     *
      * @param model
      * @return
      */
     @RequestMapping("/review")
-    public String review(Model model){
+    public String review(Model model) {
         logger.debug("进入审核页面");
-        return ROOTS+"review.html";
+        return ROOTS + "review.html";
     }
 
     /**
      * 查看学生的审核
+     *
      * @param basis
      * @return
      */
     @RequestMapping("/review/selectAll")
     @ResponseBody
-    public Object selectAllStudentsReview(@RequestParam(required = false) String basis){
-        IPage page = null;
+    public Object selectAllStudentsReview(@RequestParam(required = false) String basis) {
         Long userId = ShiroKit.getUserNotNull().getId();
         User user = this.userService.getById(userId);
-        page = reviewService.selectAllStudentsReview(user);
-
+        IPage page = reviewService.selectAllStudentsReview(user);
         return LayuiPageFactory.createPageInfo(page);
     }
 
-    /**
-     * 进入图片查看页面
-     * @param studentId
-     * @param bonusType
-     * @return
-     */
-    @RequestMapping("/review/toiamge")
-    public String showImage(@RequestParam String studentId,@RequestParam String bonusType){
-        logger.debug("进入查看证明页面");
-        String image = reviewService.selectImage(studentId,bonusType);
-        LogObjectHolder.me().set(image);
-        return ROOTS+"/review/review_showimage.html";
+
+    @RequestMapping("/review/totoExamine")
+    public String showImage(@RequestParam String applyId, Model model) {
+        logger.debug("进入添加审核意见页面");
+        model.addAttribute("applyId", applyId);
+        return ROOTS + "/review/toExamine.html";
     }
 
+//    /**
+//     * 进入图片查看页面
+//     *
+//     * @return
+//     */
+//    @RequestMapping("/review/toImage")
+//    public String showImage(@RequestParam("studentId") String studentId, @RequestParam("bonusType") String bonusType) {
+//        logger.debug("进入查看证明页面");
+////        String image = reviewService.selectImage(studentId,bonusType);
+////        LogObjectHolder.me().set(image);
+//        return ROOTS + "/review/review_showimage.html";
+//    }
+
+//    /**
+//     * 查询证明
+//     */
+//    @RequestMapping("/review/showImage")
+//    @ResponseBody
+//    public String iamge(@RequestParam String studentId, @RequestParam String bonusType) {
+//        try {
+//            bonusType = new String(bonusType.getBytes("ISO8859-1"), "utf-8");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println("showimage:" + studentId + bonusType);
+//        Long applyId = grantService.selectApplyId(studentId, bonusType);
+//        String path = grantService.selectFilePath(applyId);
+//        return path;
+//
+//    }
+
     /**
-     * 教师以上查询图片
+     * 下载
      * @param studentId
      * @param bonusType
-     * @return 返回的是base64的图片
+     * @param request
+     * @param response
+     * @throws Exception
      */
-    @RequestMapping("/review/showimage")
+    @RequestMapping("/review/down")
     @ResponseBody
-    public String iamge(@RequestParam String studentId,@RequestParam String bonusType){
-        try {
-            bonusType = new String(bonusType.getBytes("ISO8859-1"),"utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+    public void down(@RequestParam String studentId, @RequestParam String bonusType,HttpServletRequest request,HttpServletResponse response) throws Exception {
+        System.out.println("showimage:" + studentId + bonusType);
+        Long applyId = grantService.selectApplyId(studentId, bonusType);
+        String path = grantService.selectFilePath(applyId);//获取文件路径
+        AGrantUtil aGrantUtil = new AGrantUtil();
+        ArrayList<File> files = aGrantUtil.getFiles(path);
+
+        String fileSaveRootPath = "D:\\File\\";
+        //得到要下载的文件
+        BufferedInputStream bis = null;
+        byte[] buffer = new byte[0];
+        int read = 0;
+        //先压缩
+        String zipName = studentId+".zip";
+
+        String zipPath = fileSaveRootPath + zipName;
+        ZipOutputStream zipOutput = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipPath)));
+        for(int i =0;i<files.size();i++){
+            ZipEntry zEntry = new ZipEntry(files.get(i).getName());
+            zipOutput.putNextEntry(zEntry);
+             bis = new BufferedInputStream(new FileInputStream(files.get(i)));
+             buffer = new byte[1024];
+            while((read = bis.read(buffer)) != -1){
+                zipOutput.write(buffer, 0, read);
+            }
+
         }
-        return reviewService.selectImage(studentId,bonusType);
+        bis.close();
+        zipOutput.close();
+        //创建输出流，下载zip
+        try(OutputStream out = response.getOutputStream();
+            FileInputStream in = new FileInputStream(new File(zipPath));){
+            //设置响应头，控制浏览器下载该文件
+            response.setHeader("Content-Type","application/octet-stream");
+            response.setHeader("Content-Disposition",
+                    "attachment;filename="+java.net.URLEncoder.encode(zipName, "UTF-8"));
+            while((read = in.read(buffer)) != -1){
+                out.write(buffer, 0, read);
+            }
+            System.out.println("zip下载路径："+zipPath);
+        }finally {
+            try {
+                //删除压缩包
+                File zfile = new File(zipPath);
+                zfile.delete();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+
     }
+
+
 
     /**
      * 学生自己查询图片
@@ -106,63 +194,61 @@ public class ReviewController extends BaseController {
      * @param bonusType
      * @return
      */
-    @RequestMapping("/review/stu_showimage")
-    @ResponseBody
-    public String iamges(@RequestParam String studentId,@RequestParam String bonusType){
-        return reviewService.selectImage(studentId,bonusType);
-    }
+//    @RequestMapping("/review/stu_showimage")
+//    @ResponseBody
+//    public String iamges(@RequestParam String studentId,@RequestParam String bonusType){
+//        return reviewService.selectImage(studentId,bonusType);
+//    }
 
     /**
      * 删除学生的申请
+     *
      * @param studentId
      * @param bonusType
      * @return
      */
     @RequestMapping("/review/deletereview")
     @ResponseBody
-    public ResponseData deletereview(@RequestParam String studentId, @RequestParam String bonusType){
-        this.reviewService.deletereview(studentId,bonusType);
+    public ResponseData deletereview(@RequestParam String studentId, @RequestParam String bonusType) {
+        this.reviewService.deletereview(studentId, bonusType);
         return SUCCESS_TIP;
     }
 
     /**
-     * 审核
-     * @param studentId
-     * @param bonusType
+     * 审核不通过
+     *
      * @return
      */
-    @RequestMapping("/review/pass")
+    @RequestMapping("/review/toExamine")
     @ResponseBody
-    public ResponseData pass(@RequestParam String studentId, @RequestParam String bonusType){
+    public ResponseData pass(@RequestParam Long applyId) {
+        logger.debug("审核接收数据:" + applyId);
+        int num = this.reviewService.nopass(String.valueOf(applyId));
+        return SUCCESS_TIP;
+    }
+
+    /**
+     * 审核通过
+     *
+     * @param applyId
+     * @param auditComments
+     * @param remarks
+     * @return
+     */
+    @RequestMapping("/review/addOpinion")
+    @ResponseBody
+    public String opinion(@RequestParam Long applyId, @RequestParam String auditComments, @RequestParam String remarks) {
         Long userId = ShiroKit.getUserNotNull().getId();
         User user = this.userService.getById(userId);
-        this.reviewService.toExamine(user,studentId,bonusType);
-        return SUCCESS_TIP;
-    }
-
-    @RequestMapping("/review/nopass")
-    @ResponseBody
-    public ResponseData nopass(@RequestParam String studentId, @RequestParam String bonusType){
-        this.reviewService.nopass(studentId, bonusType);
-        return SUCCESS_TIP;
-    }
-    /**
-     * 解密base64位输入流
-     * @param file
-     */
-    private ByteArrayInputStream inputstream(String file){
-        //将字符串转换为byte数组
-        byte[] bytes = new byte[0];
-        try {
-            //解密，转byte
-            bytes = new BASE64Decoder().decodeBuffer(file.trim());
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        AGrantUtil aGrantUtil = new AGrantUtil();
+//        auditComments = aGrantUtil.pingyujson(applyId,user.getRoleId(),user.getName(),auditComments);
+//        remarks = aGrantUtil.beizhujson(applyId,user.getRoleId(),user.getName(),remarks);
+//        logger.debug(auditComments);
+//        logger.debug(remarks);
+        int num = this.reviewService.addOpinion(applyId, auditComments, remarks);
+        if (num == 1) {
+            return "1";
         }
-        //转化为输入流
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-        return inputStream;
-
+        return "0";
     }
 }

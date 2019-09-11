@@ -1,3 +1,4 @@
+console.log("showiamge运行了")
 /**
  * 用户详情对话框
  */
@@ -20,8 +21,9 @@ layui.use(['layer', 'form', 'admin', 'laydate', 'ax'], function () {
     // admin.iframeAuto();
 
     //获取用户信息
-    var ajax = new $ax(Feng.ctxPath + "/review/showimage?studentId=" + Feng.getUrlParam("studentId") +"&bonusType=" +Feng.getUrlParam("bonusType"));
-    var result = ajax.start();
-    var path = result;
-    $("#iamge").attr('src',path)
+    // var ajax = new $ax(Feng.ctxPath + "/review/showImage?studentId=" + Feng.getUrlParam("studentId") +"&bonusType=" +Feng.getUrlParam("bonusType"));
+    // var result = ajax.start();
+    // $("#show").attr("href",result);
+    // var path = result;
+    // $("#iamge").attr('src',path)
 });

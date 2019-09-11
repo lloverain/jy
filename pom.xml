@@ -191,6 +191,24 @@
             <version>3.10-FINAL</version>
         </dependency>
 
+        <!--file转MultipartFile-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.1.7.RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/au.com.dius/pact-jvm-consumer -->
+        <dependency>
+            <groupId>au.com.dius</groupId>
+            <artifactId>pact-jvm-consumer_2.12</artifactId>
+            <version>3.6.12</version>
+        </dependency>
 
     </dependencies>
 

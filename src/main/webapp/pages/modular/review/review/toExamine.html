@@ -1,0 +1,37 @@
+@layout("/common/_container.html",{plugins:["ztree"],css:["/assets/modular/review/review/toExamine.css"],js:["/assets/modular/review/review/toExamine.js"]}){
+<form class="user-info-form" id="form_opinion" enctype="multipart/form-data" method="post">
+
+    <div class="layui-form-item"  style="display: none">
+        <label class="layui-form-label">id</label>
+        <div class="layui-input-block">
+              <input name="applyId" type="text" value="${applyId}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">审核评语</label>
+        <div class="layui-input-block">
+              <textarea name="auditComments" required lay-verify="required" placeholder="请输入评语"
+                        class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+              <textarea name="remarks" required lay-verify="required" placeholder="请输入备注"
+                        class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <!--提交-->
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn" onclick="submission()">
+                提交审核意见
+            </button>
+        </div>
+    </div>
+
+</form>
+@}

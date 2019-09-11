@@ -1,8 +1,11 @@
 package cn.stylefeng.guns.modular.application.service;
 
 import cn.stylefeng.guns.modular.application.entity.Grant;
+import cn.stylefeng.guns.modular.application.util.AGrantUtil;
 import org.junit.Test;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GrantServiceTest {
@@ -22,8 +25,6 @@ public class GrantServiceTest {
 //        grant.setDept_id("8");
         GrantService grantService = new GrantService();
 //        int a = grantService.insertGrant(grant);
-        List<Grant> grantList = grantService.selectGrant("1");
-        System.out.println(grantList.toString());
 
     }
     // 将字符串转换成二进制字符串，以空格相隔
@@ -34,5 +35,18 @@ public class GrantServiceTest {
             result += Integer.toBinaryString(strChar[i]);
         }
         return result;
+    }
+    @Test
+    public void getfile(){
+        System.out.println("ffff");
+        AGrantUtil aGrantUtil= new AGrantUtil();
+        try {
+            ArrayList<File> files = aGrantUtil.getFiles("D:/File/20170001/助学金");
+            for(int i = 0;i<files.size();i++){
+                System.out.println("路径"+files.get(i).getPath());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

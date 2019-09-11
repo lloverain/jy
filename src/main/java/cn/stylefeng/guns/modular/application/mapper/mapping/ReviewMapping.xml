@@ -1,67 +1,60 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.stylefeng.guns.modular.application.mapper.ReviewMapper">
-    <resultMap id="review" type="cn.stylefeng.guns.modular.application.entity.review">
-        <id column="studentId" property="student_id"/>
-        <result column="name" property="name"/>
+    <resultMap id="Stu" type="cn.stylefeng.guns.modular.student.entity.Stu">
+        <id column="applyId" property="apply_id"/>
+        <result column="studentId" property="student_id"/>
+        <result column="studentName" property="name"/>
         <result column="sex" property="sex"/>
         <result column="age" property="age"/>
-        <result column="phone" property="phone"/>
-        <result column="address" property="address"/>
+        <result column="famousRace" property="famous_Race"/>
         <result column="politicalStatus" property="political_status"/>
-        <result column="familyAnnualIncome" property="familyAnnualIncome"/>
-        <result column="image" property="image"/>
+        <result column="idCart" property="id_cart"/>
+        <result column="phone" property="phone"/>
         <result column="deptId" property="dept_id"/>
+        <result column="address" property="address"/>
+        <result column="gradePoint" property="grade_point"/>
+        <result column="vocationalEducationCredits" property="vocational_education_credits"/>
+        <result column="quantitativeCredit" property="quantitative_credit"/>
+        <result column="applyReason" property="apply_reason"/>
         <result column="bonusType" property="bonus_type"/>
-        <result column="instructor" property="Instructor"/>
-        <result column="firstInstance" property="first_instance"/>
-        <result column="secondInstance" property="second_instance"/>
-        <result column="threeInstance" property="three_instance"/>
-        <result column="fourInstance" property="four_instance"/>
-        <result column="state" property="state"/>
+
+        <result column="fatherName" property="father_name"/>
+        <result column="fatherAge" property="father_age"/>
+        <result column="fatherPhone" property="father_phone"/>
+        <result column="fatherCompany" property="father_company"/>
+        <result column="fatherMonthlyIncome" property="father_monthly_income"/>
+        <result column="motherName" property="mother_name"/>
+        <result column="motherAge" property="mother_age"/>
+        <result column="motherPhone" property="mother_phone"/>
+        <result column="motherCompany" property="mother_company"/>
+        <result column="motherMonthlyIncome" property="mother_monthly_income"/>
+        <result column="familyAccount" property="family_account"/>
+        <result column="familyNumbs" property="family_numbs"/>
     </resultMap>
+    <!-- 查询所有学生的申请信息-->
+    <select id="selectAllStudentsReview" resultType="cn.stylefeng.guns.modular.student.entity.Stu">
+        select * from (student_grant inner join student_family on student_grant.apply_id = student_family.apply_id)
+        inner join student_comment on student_grant.apply_id = student_comment.apply_id
 
-    <select id="selectAllStudentsReview" resultType="cn.stylefeng.guns.modular.application.entity.review">
-        select * from student_grant
-<!--        <if test="dept_id != null and dept_id!=''">-->
-<!--            where dept_id = #{dept_id}-->
-<!--        </if>-->
-
-                <choose>
-                    <when test="dept_id != null and dept_id !=''">
-                        where dept_id = #{dept_id}
-                    </when>
-                    <otherwise>
-                        where (dept_id  REGEXP'[^0-9.]')=0
-                    </otherwise>
-                </choose>
-
-        <if test="studentId != null and studentId != ''">
-            where student_id like concat(concat('%',#{studentId}),'%')
-        </if>
-        <if test="name !=null and name != ''">
-            where name like concat(concat('%',#{name}),'%')
+        <if test="examineState!=null || examineState!=''">
+            where student_comment.examine_state = #{examineState}
         </if>
 
-        <if test="instructor !=null and instructor!=''">
-            and Instructor = #{instructor}
+        <choose>
+            <when test="auditDepartment==null || auditDepartment==''">
+                and student_comment.audit_department is null
+            </when>
+            <otherwise>
+                and student_comment.audit_department = #{auditDepartment}
+            </otherwise>
+        </choose>
+
+        <if test="deptId!=null || deptId!=''">
+            and student_grant.dept_id = #{deptId};
         </if>
 
-        <if test="firstInstance !=null and firstInstance!=''">
-            and first_instance = #{firstInstance}
-        </if>
-        <if test="secondInstance !=null and secondInstance!=''">
-            and second_instance = #{secondInstance}
-        </if>
-        <if test="threeInstance !=null and threeInstance!=''">
-            and three_instance = #{threeInstance}
-        </if>
-        <if test="fourInstance !=null and fourInstance!=''">
-            and four_instance = #{fourInstance}
-        </if>
-        <if test="state !=null and state !=''">
-            and state = #{state}
-        </if>
+
     </select>
 
     <select id="selectImage" resultType="java.lang.String">
@@ -72,32 +65,12 @@
         delete from student_grant where student_id = #{studentId} and bonus_type = #{bonusType}
     </delete>
 
-    <update id="toExamine">
-         update student_grant set
-        <if test="instructor !=null and instructor!=''">
-            Instructor = #{instructor}
-        </if>
-        <if test="firstInstance !=null and firstInstance!=''">
-            first_instance = #{firstInstance}
-        </if>
-        <if test="secondInstance !=null and secondInstance!=''">
-            second_instance = #{secondInstance}
-        </if>
-        <if test="threeInstance !=null and threeInstance!=''">
-            three_instance = #{threeInstance}
-        </if>
-        <if test="fourInstance !=null and fourInstance!=''">
-            four_instance = #{fourInstance}
-        </if>
-        <if test="state !=null and state !=''">
-            ,state = #{state}
-        </if>
-        where student_id = #{studentId} and bonus_type=#{bonusType}
+    <!--审核-->
+    <update id="toExamine" parameterType="cn.stylefeng.guns.modular.application.entity.StudentComment">
+        update student_comment set
+        audit_department = #{auditDepartment}, examine_state = #{examineState} ,auditors = #{auditors} ,audit_comments =
+        #{auditComments} ,remarks = #{remarks}
+        where apply_id = #{applyId}
     </update>
 
-    <update id="nopass">
-        update student_grant set Instructor = 'F',first_instance = 'F',second_instance = 'F',
-        second_instance = 'F',three_instance = 'F',four_instance = 'F',state = '2'
-         where student_id=#{studentId} and bonus_type = #{bonusType}
-    </update>
 </mapper>

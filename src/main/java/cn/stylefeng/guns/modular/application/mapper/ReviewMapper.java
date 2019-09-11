@@ -1,6 +1,8 @@
 package cn.stylefeng.guns.modular.application.mapper;
 
+import cn.stylefeng.guns.modular.application.entity.StudentComment;
 import cn.stylefeng.guns.modular.application.entity.review;
+import cn.stylefeng.guns.modular.student.entity.Stu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
@@ -17,31 +19,27 @@ import java.util.List;
 @Repository("ReviewMapperRepository")
 public interface ReviewMapper extends BaseMapper<review> {
 
-    List<review> selectAllStudentsReview(@Param("page") Page<review> page,
-                                         @Param("dept_id") String dept_id,
-                                         @Param("studentId") String studentId,
-                                         @Param("name") String name,
-                                         @Param("instructor") String instructor,
-                                         @Param("firstInstance") String firstInstance,
-                                         @Param("secondInstance") String secondInstance,
-                                         @Param("threeInstance") String threeInstance,
-                                         @Param("fourInstance") String fourInstance,
-                                         @Param("state") String state
-        );
-
-    String selectImage(@Param("studentId") String studentId,@Param("bonusType") String bonusType);
-
-    int toExamine(@Param("studentId") String studentId,
-                  @Param("bonusType") String bonusType,
-                  @Param("instructor") String instructor,
-                  @Param("firstInstance") String firstInstance,
-                  @Param("secondInstance") String secondInstance,
-                  @Param("threeInstance") String threeInstance,
-                  @Param("fourInstance") String fourInstance,
-                  @Param("state") String state
+    /**
+     * 查询申请信息
+     * @param deptId 班级
+     * @param auditDepartment 审核部门
+     * @param examineState  审核结果
+     * @return
+     */
+    List<Stu> selectAllStudentsReview(@Param("deptId") String deptId,
+                                      @Param("auditDepartment") String auditDepartment,
+                                      @Param("examineState") String examineState
     );
 
-    int deletereview(@Param("studentId") String studentId,@Param("bonusType") String bonusType);
+    String selectImage(@Param("studentId") String studentId, @Param("bonusType") String bonusType);
 
-    int nopass(@Param("studentId") String studentId,@Param("bonusType") String bonusType);
+    /**
+     * 审核通过和不通过
+     * @param studentComment
+     * @return
+     */
+    int toExamine(StudentComment studentComment);
+
+    int deletereview(@Param("studentId") String studentId, @Param("bonusType") String bonusType);
+
 }

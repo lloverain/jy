@@ -3,49 +3,130 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.guns.modular.application.mapper.GrantMapper">
-
-    <resultMap id="grant" type="cn.stylefeng.guns.modular.application.entity.Grant">
-        <id column="studentId" property="student_id"/>
-        <result column="name" property="name"/>
+    <resultMap id="Stu" type="cn.stylefeng.guns.modular.student.entity.Stu">
+        <id column="applyId" property="apply_id"/>
+        <result column="studentId" property="student_id"/>
+        <result column="studentName" property="name"/>
         <result column="sex" property="sex"/>
         <result column="age" property="age"/>
+        <result column="famousRace" property="famous_Race"/>
+        <result column="politicalStatus" property="political_status"/>
         <result column="idCart" property="id_cart"/>
         <result column="phone" property="phone"/>
+        <result column="deptId" property="dept_id"/>
         <result column="address" property="address"/>
-        <result column="politicalStatus" property="political_status"/>
-        <result column="familyAnnualIncome" property="familyAnnualIncome"/>
-        <result column="image" property="image"/>
-        <result column="dept_id" property="dept_id"/>
+        <result column="gradePoint" property="grade_point"/>
+        <result column="vocationalEducationCredits" property="vocational_education_credits"/>
+        <result column="quantitativeCredit" property="quantitative_credit"/>
+        <result column="applyReason" property="apply_reason"/>
         <result column="bonusType" property="bonus_type"/>
-
+        <!--        <result column="material" property="material"/>-->
+        <!--        <result column="materialOne" property="material_one"/>-->
+        <!--        <result column="materialTwo" property="material_two"/>-->
+        <!--        <result column="materialThree" property="material_three"/>-->
+        <!--        <result column="materialFour" property="material_four"/>-->
+        <!--        <result column="materialFive" property="material_five"/>-->
+        <result column="fatherName" property="father_name"/>
+        <result column="fatherAge" property="father_age"/>
+        <result column="fatherPhone" property="father_phone"/>
+        <result column="fatherCompany" property="father_company"/>
+        <result column="fatherMonthlyIncome" property="father_monthly_income"/>
+        <result column="motherName" property="mother_name"/>
+        <result column="motherAge" property="mother_age"/>
+        <result column="motherPhone" property="mother_phone"/>
+        <result column="motherCompany" property="mother_company"/>
+        <result column="motherMonthlyIncome" property="mother_monthly_income"/>
+        <result column="familyAccount" property="family_account"/>
+        <result column="familyNumbs" property="family_numbs"/>
     </resultMap>
-<!--    插入证明-->
-    <insert id="insertgrant" parameterType="cn.stylefeng.guns.modular.application.entity.Grant">
-        insert into student_grant values (#{studentId},#{name},#{sex},#{age},#{idCart},#{phone},#{address},#{politicalStatus},
-                    #{familyAnnualIncome},#{image},#{dept_id},#{bonusType},'F','F','F','F','F','3')
+
+    <!--    插入studentGrant-->
+    <insert id="insertgrant" parameterType="cn.stylefeng.guns.modular.application.entity.StudentGrant"
+            useGeneratedKeys="true" keyProperty="applyId">
+        insert into student_grant (student_id, name, sex, age, famous_race, political_status, id_cart, phone, dept_id,
+        address, grade_point, vocational_education_credits, quantitative_credit, apply_reason, bonus_type, material,
+        material_one, material_four, material_three, material_two, material_five)
+        values (#{studentId},#{name},#{sex},#{age},#{famousRace},#{politicalStatus},#{idCart},#{phone},
+        #{deptId},#{address},#{gradePoint},#{vocationalEducationCredits},#{quantitativeCredit},#{applyReason},#{bonus_type},#{material},
+        #{materialOne},#{materialTwo},#{materialThree},#{materialFour},#{materialFive})
+
+        <selectKey keyProperty="applyId" order="AFTER" resultType="java.lang.Long">
+            select last_insert_id() as id
+        </selectKey>
+    </insert>
+    <!--插入studentFamily-->
+    <insert id="insertfamily" parameterType="cn.stylefeng.guns.modular.application.entity.StudentFamily">
+        insert into student_family values (#{applyId},#{fatherName},#{fatherAge},#{fatherPhone},#{fatherCompany},#{fatherMonthlyIncome},
+        #{motherName},#{motherAge},#{motherPhone},#{motherCompany},#{motherMonthlyIncome},#{familyAccount},#{familyNumbs})
     </insert>
 
-<!--查看个人申请-->
-    <select id="selectgrant" resultType="cn.stylefeng.guns.modular.application.entity.Grant" parameterType="cn.stylefeng.guns.modular.application.entity.Grant">
-        select * from student_grant where student_id = #{studentId}
-    </select>
-<!--提交前检查是否提交过-->
-    <select id="select_repeat" resultType="cn.stylefeng.guns.modular.application.entity.Grant">
-        select * from student_grant where student_id=#{studentId} and bonus_type = #{bonusType}
-    </select>
-<!--查询班级-->
-    <select id="select_dept_id" resultType="java.lang.String" parameterType="java.lang.String">
-        select dept_id from sys_user where user_id = #{studentId}
+    <insert id="insertcomment" parameterType="cn.stylefeng.guns.modular.application.entity.StudentComment">
+        insert into student_comment values (#{applyId},#{auditDepartment},#{auditors},#{examineState},#{auditComments},#{remarks})
+    </insert>
+
+    <!--查看个人申请-->
+    <select id="selectStudentGrant" resultType="cn.stylefeng.guns.modular.student.entity.Stu">
+        select
+         student_grant.apply_id, student_grant.student_id, student_grant.name, student_grant.sex, student_grant.age, student_grant.famous_race, student_grant.political_status, student_grant.id_cart, student_grant.phone, student_grant.dept_id, student_grant.address, student_grant.grade_point, student_grant.vocational_education_credits, student_grant.quantitative_credit, student_grant.apply_reason, student_grant.bonus_type, student_grant.material, student_grant.material_one,student_grant.material_four, student_grant.material_three, student_grant.material_two,student_grant. material_five, father_name, father_age, father_phone, father_company, father_monthly_income, mother_name, mother_age, mother_phone, mother_company, mother_monthly_income, family_account, family_numbs, audit_department, auditors, examine_state, audit_comments, remarks
+         from (student_grant inner join student_family on student_grant.apply_id = student_family.apply_id)
+        inner join student_comment on student_grant.apply_id = student_comment.apply_id where student_grant.student_id = #{studentId} and student_grant.bonus_type = #{bonusType}
     </select>
 
-    <select id="select_state" resultType="java.lang.String">
-        select state from student_grant where student_id=#{studentId} and bonus_type = #{bonusType}
+<!--    查询studentGrant信息-->
+    <select id="selectNameAndMaterial" resultType="cn.stylefeng.guns.modular.application.entity.StudentGrant">
+        select * from student_grant where apply_id = #{applyId}
     </select>
 
-    <update id="updatagrant" parameterType="cn.stylefeng.guns.modular.application.entity.Grant">
-        update student_grant set name = #{name},sex = #{sex},age = #{age},id_cart = #{idCart},
-        phone = #{phone},address = #{address},political_status = #{politicalStatus},
-                    familyAnnualIncome = #{familyAnnualIncome},image = #{image},state = '3' where student_id = #{studentId} and bonus_type = #{bonusType}
+    <!--提交前检查是否提交过-->
+    <select id="select_repeat" resultType="java.lang.Integer">
+        select count(*) from student_grant where student_id=#{studentId} and bonus_type = #{bonusType}
+    </select>
+    <!--查询班级-->
+
+    <!-- 查询申请Id-->
+    <select id="select_applyId" resultType="java.lang.Long">
+        select apply_id from student_grant where student_id=#{studentId} and bonus_type = #{bonusType}
+    </select>
+
+
+    <!--  查看申请状态-->
+    <select id="select_state" resultType="cn.stylefeng.guns.modular.application.entity.StudentComment">
+        select * from student_comment where apply_id = #{applyId}
+    </select>
+
+
+
+    <!--    查看是否申请过-->
+    <update id="updateStudentGrant" parameterType="cn.stylefeng.guns.modular.application.entity.StudentGrant">
+        update student_grant set  student_grant.name = #{name},student_grant.sex = #{sex},student_grant.age = #{age},
+        student_grant.famous_race = #{famousRace} ,student_grant.political_status = #{politicalStatus},
+        student_grant.id_cart = #{idCart},student_grant.phone = #{phone},student_grant.dept_id = #{deptId},
+        student_grant.address = #{address},student_grant.grade_point = #{gradePoint},student_grant.vocational_education_credits = #{vocationalEducationCredits},
+        student_grant.quantitative_credit = #{quantitativeCredit},student_grant.apply_reason = #{applyReason},
+        student_grant.material = #{material},material_one =#{materialOne},material_two = #{materialTwo},
+        material_three = #{materialThree},material_four = #{materialFour},material_five = #{materialFive}
+        where apply_id = #{applyId}
     </update>
 
+    <update id="updateStudentFamily" parameterType="cn.stylefeng.guns.modular.application.entity.StudentFamily">
+        update student_family set
+                father_name = #{fatherName},father_age = #{fatherAge},father_phone=#{fatherPhone},
+                father_company = #{fatherCompany},father_monthly_income = #{fatherMonthlyIncome},
+                mother_name = #{motherName},mother_age = #{motherAge},mother_phone=#{motherPhone},
+                mother_company = #{motherCompany},mother_monthly_income = #{motherMonthlyIncome},
+                family_account = #{familyAccount},family_numbs=#{familyNumbs}
+             where apply_id = #{applyId}
+    </update>
+
+    <update id="updateStudentComment" parameterType="cn.stylefeng.guns.modular.application.entity.StudentComment">
+        update student_comment set
+                audit_department = #{auditDepartment},auditors = #{auditors},
+                examine_state = #{examineState},audit_comments = #{auditComments},
+                remarks = #{remarks}
+                where apply_id = #{applyId}
+    </update>
+
+    <select id="selectFilePath" resultType="java.lang.String">
+        select material from student_grant where apply_id = #{applyId}
+    </select>
 </mapper>

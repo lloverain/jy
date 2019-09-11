@@ -91,9 +91,9 @@ public class SystemController extends BaseController {
      */
     @RequestMapping("/console")
     public String console(Model model) {
-        Long userId = ShiroKit.getUserNotNull().getId();
-        User user = this.userService.getById(userId);
-        String xuehao = user.getAccount();
+//        Long userId = ShiroKit.getUserNotNull().getId();
+//        User user = this.userService.getById(userId);
+//        String xuehao = user.getAccount();
 //        int zong = stu_application.selectAll(xuehao);
 //        int pass = stu_application.selectpass(xuehao);
 //        int fail = stu_application.selectfail(xuehao);

@@ -1,6 +1,7 @@
-var tu;
-var bonusType = document.getElementsByClassName("layui-layer-title");
-var studentId = document.getElementsByName("studentId");
+console.log("aaaaa");
+// var tu;
+// var bonusType = document.getElementsByClassName("layui-layer-title");
+// var studentId = document.getElementsByName("studentId");
 layui.use(['form', 'upload', 'element', 'ax', 'laydate'],function () {
     var form = layui.form;
     var upload = layui.upload;
@@ -10,33 +11,34 @@ layui.use(['form', 'upload', 'element', 'ax', 'laydate'],function () {
     var $ = layui.jquery;
 
     //渲染时间选择框
-    laydate.render({
-        elem: '#birthday'
-    });
-    var ajax = new $ax(Feng.ctxPath + "/review/stu_showimage?studentId=" + studentId[0].value +"&bonusType=助学金");
-    var result = ajax.start();
-    var path = result;
-    $("#preview").attr('src',path);
-    $("#text").html("已上传");
+    // laydate.render({
+    //     elem: '#birthday'
+    // });
+    // var ajax = new $ax(Feng.ctxPath + "/review/stu_showimage?studentId=" + studentId[0].value +"&bonusType=助学金");
+    // var result = ajax.start();
+    // var path = result;
+    // $("#preview").attr('src',path);
+    // $("#text").html("已上传");
     //表单提交事件
-    form.on('submit(userInfoSubmit)', function (data) {
-        form.val('userInfoForm', result.data);
-        var ajax = new $ax(Feng.ctxPath + "/application/updatashenqing", function (data) {
-            if (data===1){
-                Feng.success("申请成功!");
-            }else {
-                Feng.error("申请失败")
-            }
-        }, function (data) {
-            Feng.error("申请失败，稍后再试！" + data.responseJSON.message + "!");
-        });
-        ajax.set(data.field);
-        ajax.set("image",tu);
-        ajax.start();
 
-    });
+
+    // form.on('submit(userInfoSubmit)', function (data) {
+    //     form.val('userInfoForm', result.data);
+    //     var ajax = new $ax(Feng.ctxPath + "/application/updatashenqing", function (data) {
+    //         if (data===1){
+    //             Feng.success("申请成功!");
+    //         }else {
+    //             Feng.error("申请失败")
+    //         }
+    //     }, function (data) {
+    //         Feng.error("申请失败，稍后再试！" + data.responseJSON.message + "!");
+    //     });
+    //     ajax.set(data.field);
+    //     // ajax.set("image",tu);
+    //     ajax.start();
+    //
+    // });
 });
-
 
 function imgPreview(fileDom){
     //判断是否支持FileReader
@@ -57,4 +59,39 @@ function imgPreview(fileDom){
     };
 
     reader.readAsDataURL(file);
+}
+
+
+
+function update() {
+    var $ = layui.jquery;
+    var form = new FormData($("#form_update")[0]);
+    $.ajax({
+        url: Feng.ctxPath + "/application/updatashenqing?bonusType=助学金",
+        type: 'POST',
+        data: form,
+        processData: false,
+        contentType: false,
+        async: false,
+        success: function (data) {
+            if (data) {
+                if (data === 1) {
+                    Feng.success("已申请,请勿重复申请!");
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index);
+                }
+                if (data === 2) {
+                    Feng.success("申请成功!");
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index);
+                }
+                if (data === 3) {
+                    Feng.error("申请失败!");
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index);
+                }
+            }
+        }
+    });
+
 }

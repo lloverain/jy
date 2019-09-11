@@ -81,15 +81,6 @@ public class UserFactory {
             if (ToolUtil.isNotEmpty(newUser.getPhone())) {
                 oldUser.setPhone(newUser.getPhone());
             }
-//            if (ToolUtil.isNotEmpty(newUser.getDepartment())) {
-//                oldUser.setDepartment(newUser.getDepartment());
-//            }
-//            if (ToolUtil.isNotEmpty(newUser.getBanji())) {
-//                oldUser.setBanji(newUser.getBanji());
-//            }
-//            if (ToolUtil.isNotEmpty(newUser.getStuID())) {
-//                oldUser.setStuID(newUser.getStuID());
-//            }
             return oldUser;
         }
     }
