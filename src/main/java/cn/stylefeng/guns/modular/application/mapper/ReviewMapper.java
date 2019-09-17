@@ -31,14 +31,19 @@ public interface ReviewMapper extends BaseMapper<review> {
                                       @Param("examineState") String examineState
     );
 
-    String selectImage(@Param("studentId") String studentId, @Param("bonusType") String bonusType);
-
     /**
      * 审核通过和不通过
      * @param studentComment
      * @return
      */
     int toExamine(StudentComment studentComment);
+
+    /**
+     * 根据applyId查询studentcomment
+     * @param ApplyId
+     * @return
+     */
+    StudentComment selectStudentComment(Long ApplyId);
 
     int deletereview(@Param("studentId") String studentId, @Param("bonusType") String bonusType);
 

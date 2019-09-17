@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,37 +85,17 @@ public class ReviewController extends BaseController {
         model.addAttribute("applyId", applyId);
         return ROOTS + "/review/toExamine.html";
     }
-
-//    /**
-//     * 进入图片查看页面
-//     *
-//     * @return
-//     */
-//    @RequestMapping("/review/toImage")
-//    public String showImage(@RequestParam("studentId") String studentId, @RequestParam("bonusType") String bonusType) {
-//        logger.debug("进入查看证明页面");
-////        String image = reviewService.selectImage(studentId,bonusType);
-////        LogObjectHolder.me().set(image);
-//        return ROOTS + "/review/review_showimage.html";
-//    }
-
-//    /**
-//     * 查询证明
-//     */
-//    @RequestMapping("/review/showImage")
-//    @ResponseBody
-//    public String iamge(@RequestParam String studentId, @RequestParam String bonusType) {
-//        try {
-//            bonusType = new String(bonusType.getBytes("ISO8859-1"), "utf-8");
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-//        System.out.println("showimage:" + studentId + bonusType);
-//        Long applyId = grantService.selectApplyId(studentId, bonusType);
-//        String path = grantService.selectFilePath(applyId);
-//        return path;
-//
-//    }
+    @RequestMapping("/review/selectAuditRemark")
+    @ResponseBody
+    public Object selectAuditRemark(@RequestParam String applyId){
+        logger.debug("查询审核意见和备注");
+        IPage page = reviewService.selectAuditRemark(applyId);
+        return LayuiPageFactory.createPageInfo(page);
+//        Long userId = ShiroKit.getUserNotNull().getId();
+//        User user = this.userService.getById(userId);
+//        IPage page = reviewService.selectAuditRemark(applyId);
+//        return LayuiPageFactory.createPageInfo(page);
+    }
 
     /**
      * 下载
@@ -179,20 +160,6 @@ public class ReviewController extends BaseController {
 
     }
 
-
-
-    /**
-     * 学生自己查询图片
-     * @param studentId
-     * @param bonusType
-     * @return
-     */
-//    @RequestMapping("/review/stu_showimage")
-//    @ResponseBody
-//    public String iamges(@RequestParam String studentId,@RequestParam String bonusType){
-//        return reviewService.selectImage(studentId,bonusType);
-//    }
-
     /**
      * 删除学生的申请
      *
@@ -231,13 +198,6 @@ public class ReviewController extends BaseController {
     @RequestMapping("/review/addOpinion")
     @ResponseBody
     public String opinion(@RequestParam Long applyId, @RequestParam String auditComments, @RequestParam String remarks) {
-        Long userId = ShiroKit.getUserNotNull().getId();
-        User user = this.userService.getById(userId);
-        AGrantUtil aGrantUtil = new AGrantUtil();
-//        auditComments = aGrantUtil.pingyujson(applyId,user.getRoleId(),user.getName(),auditComments);
-//        remarks = aGrantUtil.beizhujson(applyId,user.getRoleId(),user.getName(),remarks);
-//        logger.debug(auditComments);
-//        logger.debug(remarks);
         int num = this.reviewService.addOpinion(applyId, auditComments, remarks);
         if (num == 1) {
             return "1";

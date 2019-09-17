@@ -39,29 +39,30 @@
          from (student_grant inner join student_family on student_grant.apply_id = student_family.apply_id)
         inner join student_comment on student_grant.apply_id = student_comment.apply_id
 
-        <if test="examineState!=null || examineState!=''">
+        <if test='examineState!=null and examineState!=""'>
             where student_comment.examine_state = #{examineState}
         </if>
 
         <choose>
-            <when test="auditDepartment==null || auditDepartment==''">
-                and student_comment.audit_department is null
+            <when test='auditDepartment != null and auditDepartment !=""'>
+                and student_comment.audit_department = #{auditDepartment}
             </when>
             <otherwise>
-                and student_comment.audit_department = #{auditDepartment}
+                and student_comment.audit_department is null
+
             </otherwise>
         </choose>
 
-        <if test="deptId!=null || deptId!=''">
+        <if test='deptId!=null and deptId!=""'>
             and student_grant.dept_id = #{deptId};
         </if>
 
 
     </select>
 
-    <select id="selectImage" resultType="java.lang.String">
-        select image from student_grant where student_id = #{studentId} and bonus_type = #{bonusType}
-    </select>
+   <select id="selectStudentComment" resultType="cn.stylefeng.guns.modular.application.entity.StudentComment">
+       select * from student_comment where apply_id = #{applyId}
+   </select>
 
     <delete id="deletereview">
         delete from student_grant where student_id = #{studentId} and bonus_type = #{bonusType}

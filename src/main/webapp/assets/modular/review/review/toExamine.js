@@ -1,3 +1,6 @@
+var applyId = document.getElementById("applyId");
+
+console.log(applyId.value);
 layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'], function () {
     var layer = layui.layer;
     var form = layui.form;
@@ -7,6 +10,38 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
     var laydate = layui.laydate;
     var admin = layui.admin;
     var upload = layui.upload;
+
+    var toExamine = {
+        tableId: "toExamineTable",    //表格id
+        condition: {
+            name: ""
+        }
+    };
+
+    /**
+     * 初始化表格的列
+     */
+    toExamine.initColumn = function () {
+        return [[
+            {type: 'checkbox'},
+            {field: 'teacherId', sort: false, title: '工号'},
+            {field:'auditComment',sort:false,title:'审核意见'},
+            {field:'remark',sort:false,title:'备注'},
+
+        ]];
+    };
+
+    // 渲染表格
+    var tableResult = table.render({
+        elem: '#' + toExamine.tableId,
+        url: Feng.ctxPath + '/review/selectAuditRemark?applyId='+applyId.value,
+        page: true,
+        height: "300px",
+        cellMinWidth: 100,
+        cols: toExamine.initColumn()
+    });
+
+
 
 });
 

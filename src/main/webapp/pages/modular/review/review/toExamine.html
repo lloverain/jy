@@ -1,10 +1,13 @@
-@layout("/common/_container.html",{plugins:["ztree"],css:["/assets/modular/review/review/toExamine.css"],js:["/assets/modular/review/review/toExamine.js"]}){
+@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/review/review/toExamine.js"]}){
+
+<table class="layui-table" id="toExamineTable" lay-filter="toExamineTable"></table>
+
 <form class="user-info-form" id="form_opinion" enctype="multipart/form-data" method="post">
 
     <div class="layui-form-item"  style="display: none">
         <label class="layui-form-label">id</label>
         <div class="layui-input-block">
-              <input name="applyId" type="text" value="${applyId}">
+              <input name="applyId" id="applyId" type="text" value="${applyId}">
         </div>
     </div>
 
@@ -34,4 +37,6 @@
     </div>
 
 </form>
+
+<script type="application/javascript"></script>
 @}
