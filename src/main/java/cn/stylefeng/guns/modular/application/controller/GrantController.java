@@ -29,6 +29,9 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * 申请
+ */
 @Controller
 @RequestMapping("/application")
 public class GrantController extends BaseController {
@@ -182,11 +185,11 @@ public class GrantController extends BaseController {
         String state = grantService.select_state(user.getAccount(), bonusType);
         if ("3".equals(state)) {
             return 1;
-        } else{
+        } else {
             int update = this.grantService.updataGrant(stu, bonusType);
-            if(update==2){
+            if (update == 2) {
                 return 2;
-            }else {
+            } else {
                 return 3;
             }
         }

@@ -83,19 +83,19 @@ public class ReviewService extends ServiceImpl<ReviewMapper, review> {
         return null;
     }
 
-    public IPage selectAuditRemark(String applyId){
+    public IPage selectAuditRemark(String applyId) {
         Long userId = ShiroKit.getUserNotNull().getId();
         User user = userService.getById(userId);
         List<Examine> examineList = new LinkedList<>();
 
-        if(!"1141523474871881730".equals(user.getRoleId())){
+        if (!"1141523474871881730".equals(user.getRoleId())) {
             StudentComment studentComment = reviewMapper.selectStudentComment(Long.valueOf(applyId));
             String audit = studentComment.getAuditComments();
             String remark = studentComment.getRemarks();
             JSONArray auditJson = JSONArray.parseArray(audit);
             JSONArray remarkJson = JSONArray.parseArray(remark);
 
-            for(int i = 0;i<auditJson.size();i++){
+            for (int i = 0; i < auditJson.size(); i++) {
                 Examine examine = new Examine();
                 JSONObject jsonObject = auditJson.getJSONObject(i);
                 JSONObject jsonObject1 = remarkJson.getJSONObject(i);
@@ -104,8 +104,8 @@ public class ReviewService extends ServiceImpl<ReviewMapper, review> {
                 examine.setRemark(jsonObject1.getString("remark"));
                 examineList.add(examine);
             }
-        }else {
-            examineList =null;
+        } else {
+            examineList = null;
         }
 
         Page page = LayuiPageFactory.defaultPage();
@@ -163,11 +163,11 @@ public class ReviewService extends ServiceImpl<ReviewMapper, review> {
         AGrantUtil aGrantUtil = new AGrantUtil();
 
         JSONObject auditJson = new JSONObject();
-        auditJson.put("id",user.getAccount());
+        auditJson.put("id", user.getAccount());
         auditJson.put("audit", auditComments);
 
         JSONObject remarkJson = new JSONObject();
-        remarkJson.put("id",user.getAccount());
+        remarkJson.put("id", user.getAccount());
         remarkJson.put("remark", remarks);
 
         JSONArray jsonArray = new JSONArray();

@@ -35,8 +35,13 @@
     <!-- 查询所有学生的申请信息-->
     <select id="selectAllStudentsReview" resultType="cn.stylefeng.guns.modular.student.entity.Stu">
         select
-        student_grant.apply_id, student_id, name as studentName, sex, age, famous_race, political_status, id_cart, phone, dept_id, address, grade_point, vocational_education_credits, quantitative_credit, apply_reason, bonus_type, material, material_one, material_four, material_three, material_two, material_five, father_name, father_age, father_phone, father_company, father_monthly_income, mother_name, mother_age, mother_phone, mother_company, mother_monthly_income, family_account, family_numbs, audit_department, auditors, examine_state, audit_comments, remarks
-         from (student_grant inner join student_family on student_grant.apply_id = student_family.apply_id)
+        student_grant.apply_id, student_id, name as studentName, sex, age, famous_race, political_status, id_cart,
+        phone, dept_id, address, grade_point, vocational_education_credits, quantitative_credit, apply_reason,
+        bonus_type, material, material_one, material_four, material_three, material_two, material_five, father_name,
+        father_age, father_phone, father_company, father_monthly_income, mother_name, mother_age, mother_phone,
+        mother_company, mother_monthly_income, family_account, family_numbs, audit_department, auditors, examine_state,
+        audit_comments, remarks
+        from (student_grant inner join student_family on student_grant.apply_id = student_family.apply_id)
         inner join student_comment on student_grant.apply_id = student_comment.apply_id
 
         <if test='examineState!=null and examineState!=""'>
@@ -60,7 +65,7 @@
 
     </select>
 
-   <select id="selectStudentComment" resultType="cn.stylefeng.guns.modular.application.entity.StudentComment">
+    <select id="selectStudentComment" resultType="cn.stylefeng.guns.modular.application.entity.StudentComment">
        select * from student_comment where apply_id = #{applyId}
    </select>
 

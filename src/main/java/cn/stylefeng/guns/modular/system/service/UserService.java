@@ -78,8 +78,6 @@ public class UserService extends ServiceImpl<UserMapper, User> {
             this.assertAuth(user.getUserId());
             ShiroUser shiroUser = ShiroKit.getUserNotNull();
             this.updateById(UserFactory.editUser(user, oldUser));
-            System.out.println("shiroUser:"+shiroUser.getId().toString());
-            System.out.println("user:"+user.getUserId());
 //            if (shiroUser.getId().equals(user.getUserId())) {
 //                this.updateById(UserFactory.editUser(user, oldUser));
 //            } else {
@@ -143,7 +141,6 @@ public class UserService extends ServiceImpl<UserMapper, User> {
      */
     public Page<Map<String, Object>> selectUsers(DataScope dataScope, String name, String beginTime, String endTime, Long deptId) {
         Page page = LayuiPageFactory.defaultPage();
-//        System.out.println(page+"---"+dataScope+"---"+name+"---"+beginTime+"---"+endTime+"---"+deptId);
         return this.baseMapper.selectUsers(page, dataScope, name, beginTime, endTime, deptId);
     }
 

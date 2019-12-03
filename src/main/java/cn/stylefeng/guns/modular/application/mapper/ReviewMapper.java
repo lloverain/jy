@@ -21,9 +21,10 @@ public interface ReviewMapper extends BaseMapper<review> {
 
     /**
      * 查询申请信息
-     * @param deptId 班级
+     *
+     * @param deptId          班级
      * @param auditDepartment 审核部门
-     * @param examineState  审核结果
+     * @param examineState    审核结果
      * @return
      */
     List<Stu> selectAllStudentsReview(@Param("deptId") String deptId,
@@ -33,6 +34,7 @@ public interface ReviewMapper extends BaseMapper<review> {
 
     /**
      * 审核通过和不通过
+     *
      * @param studentComment
      * @return
      */
@@ -40,6 +42,7 @@ public interface ReviewMapper extends BaseMapper<review> {
 
     /**
      * 根据applyId查询studentcomment
+     *
      * @param ApplyId
      * @return
      */

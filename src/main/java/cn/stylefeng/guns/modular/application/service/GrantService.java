@@ -80,11 +80,12 @@ public class GrantService extends ServiceImpl<GrantMapper, Grant> {
 
     /**
      * 查询状态
+     *
      * @param applyId 申请id
      * @return
      */
-    public StudentComment selectStudentComment(Long applyId){
-       return grantMapper.select_state(applyId);
+    public StudentComment selectStudentComment(Long applyId) {
+        return grantMapper.select_state(applyId);
     }
 
     /**
@@ -109,7 +110,7 @@ public class GrantService extends ServiceImpl<GrantMapper, Grant> {
     public String select_state(String studentId, String bonusType) {
         logger.debug("开始查询申请状态");
         int repeat = select_repeat(studentId, bonusType);
-        logger.debug("申请:"+repeat);
+        logger.debug("申请:" + repeat);
         if (repeat == 1) {
             Long applyId = selectApplyId(studentId, bonusType);
             StudentComment studentComment = grantMapper.select_state(applyId);
@@ -154,7 +155,8 @@ public class GrantService extends ServiceImpl<GrantMapper, Grant> {
         String path = null;
         for (MultipartFile f : stu.getMaterial()) {
             try {
-                path = AGrantUtil.savePic(f.getInputStream(), f.getOriginalFilename(), user.getAccount(),bonusType);
+                //如果这里报错，那检查是否有文件。
+                path = AGrantUtil.savePic(f.getInputStream(), f.getOriginalFilename(), user.getAccount(), bonusType);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -208,7 +210,7 @@ public class GrantService extends ServiceImpl<GrantMapper, Grant> {
             String path = null;
             for (MultipartFile f : stu.getMaterial()) {
                 try {
-                    path = AGrantUtil.savePic(f.getInputStream(), f.getOriginalFilename(), user.getAccount(),"助学金");
+                    path = AGrantUtil.savePic(f.getInputStream(), f.getOriginalFilename(), user.getAccount(), "助学金");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -266,8 +268,8 @@ public class GrantService extends ServiceImpl<GrantMapper, Grant> {
         }
     }
 
-public String selectFilePath(Long applyId){
+    public String selectFilePath(Long applyId) {
         return grantMapper.selectFilePath(applyId);
-}
+    }
 
 }

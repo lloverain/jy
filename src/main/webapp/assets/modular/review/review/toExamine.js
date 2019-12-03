@@ -62,7 +62,6 @@ function submission() {
         success: function (data) {
            if(data==="1"){
                Feng.success("审核成功，已通过！");
-
            }else {
                Feng.success("审核失败，未通过！");
 

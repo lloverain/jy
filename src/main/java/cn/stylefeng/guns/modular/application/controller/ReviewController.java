@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -85,9 +86,10 @@ public class ReviewController extends BaseController {
         model.addAttribute("applyId", applyId);
         return ROOTS + "/review/toExamine.html";
     }
+
     @RequestMapping("/review/selectAuditRemark")
     @ResponseBody
-    public Object selectAuditRemark(@RequestParam String applyId){
+    public Object selectAuditRemark(@RequestParam String applyId) {
         logger.debug("查询审核意见和备注");
         IPage page = reviewService.selectAuditRemark(applyId);
         return LayuiPageFactory.createPageInfo(page);
@@ -99,6 +101,7 @@ public class ReviewController extends BaseController {
 
     /**
      * 下载
+     *
      * @param studentId
      * @param bonusType
      * @param request
@@ -107,7 +110,7 @@ public class ReviewController extends BaseController {
      */
     @RequestMapping("/review/down")
     @ResponseBody
-    public void down(@RequestParam String studentId, @RequestParam String bonusType,HttpServletRequest request,HttpServletResponse response) throws Exception {
+    public void down(@RequestParam String studentId, @RequestParam String bonusType, HttpServletRequest request, HttpServletResponse response) throws Exception {
         System.out.println("showimage:" + studentId + bonusType);
         Long applyId = grantService.selectApplyId(studentId, bonusType);
         String path = grantService.selectFilePath(applyId);//获取文件路径
@@ -120,16 +123,16 @@ public class ReviewController extends BaseController {
         byte[] buffer = new byte[0];
         int read = 0;
         //先压缩
-        String zipName = studentId+".zip";
+        String zipName = studentId + ".zip";
 
         String zipPath = fileSaveRootPath + zipName;
         ZipOutputStream zipOutput = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipPath)));
-        for(int i =0;i<files.size();i++){
+        for (int i = 0; i < files.size(); i++) {
             ZipEntry zEntry = new ZipEntry(files.get(i).getName());
             zipOutput.putNextEntry(zEntry);
-             bis = new BufferedInputStream(new FileInputStream(files.get(i)));
-             buffer = new byte[1024];
-            while((read = bis.read(buffer)) != -1){
+            bis = new BufferedInputStream(new FileInputStream(files.get(i)));
+            buffer = new byte[1024];
+            while ((read = bis.read(buffer)) != -1) {
                 zipOutput.write(buffer, 0, read);
             }
 
@@ -137,22 +140,22 @@ public class ReviewController extends BaseController {
         bis.close();
         zipOutput.close();
         //创建输出流，下载zip
-        try(OutputStream out = response.getOutputStream();
-            FileInputStream in = new FileInputStream(new File(zipPath));){
+        try (OutputStream out = response.getOutputStream();
+             FileInputStream in = new FileInputStream(new File(zipPath));) {
             //设置响应头，控制浏览器下载该文件
-            response.setHeader("Content-Type","application/octet-stream");
+            response.setHeader("Content-Type", "application/octet-stream");
             response.setHeader("Content-Disposition",
-                    "attachment;filename="+java.net.URLEncoder.encode(zipName, "UTF-8"));
-            while((read = in.read(buffer)) != -1){
+                    "attachment;filename=" + java.net.URLEncoder.encode(zipName, "UTF-8"));
+            while ((read = in.read(buffer)) != -1) {
                 out.write(buffer, 0, read);
             }
-            System.out.println("zip下载路径："+zipPath);
-        }finally {
+            System.out.println("zip下载路径：" + zipPath);
+        } finally {
             try {
                 //删除压缩包
                 File zfile = new File(zipPath);
                 zfile.delete();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

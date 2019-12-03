@@ -8,12 +8,14 @@ import cn.stylefeng.guns.modular.student.entity.Stu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository("GrantMapperRepository")
 public interface GrantMapper extends BaseMapper<Grant> {
     /**
      * 上传student_grant
+     *
      * @param studentGrant
      * @return
      */
@@ -21,6 +23,7 @@ public interface GrantMapper extends BaseMapper<Grant> {
 
     /**
      * 上传student_family
+     *
      * @param studentFamily
      * @return
      */
@@ -28,6 +31,7 @@ public interface GrantMapper extends BaseMapper<Grant> {
 
     /**
      * 上传student_comment
+     *
      * @param studentComment
      * @return
      */
@@ -35,6 +39,7 @@ public interface GrantMapper extends BaseMapper<Grant> {
 
     /**
      * 查询申请Id
+     *
      * @param studentId
      * @param bonusType
      * @return
@@ -42,27 +47,30 @@ public interface GrantMapper extends BaseMapper<Grant> {
     Long select_applyId(@Param("studentId") String studentId,
                         @Param("bonusType") String bonusType);
 
-    Stu selectStudentGrant(@Param("studentId") String studentId,@Param("bonusType") String bonusType);//根据学生id查询该申请资料
+    Stu selectStudentGrant(@Param("studentId") String studentId, @Param("bonusType") String bonusType);//根据学生id查询该申请资料
 
     StudentGrant selectNameAndMaterial(@Param("applyId") Long applyId);
 
     /**
      * 查询是否申请过
+     *
      * @param studentId
      * @param bonusType
      * @return
      */
     int select_repeat(@Param("studentId") String studentId,
-                              @Param("bonusType") String bonusType);
+                      @Param("bonusType") String bonusType);
 
     /**
      * 查询审核的状态
+     *
      * @return
      */
-    StudentComment select_state(@Param("applyId")Long applyId);
+    StudentComment select_state(@Param("applyId") Long applyId);
 
     /**
      * 更新grant
+     *
      * @param studentGrant
      * @return
      */
@@ -70,6 +78,7 @@ public interface GrantMapper extends BaseMapper<Grant> {
 
     /**
      * 跟新family
+     *
      * @param studentFamily
      * @return
      */
@@ -77,6 +86,7 @@ public interface GrantMapper extends BaseMapper<Grant> {
 
     /**
      * 更新comment
+     *
      * @param studentComment
      * @return
      */

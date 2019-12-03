@@ -53,6 +53,7 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
             {align: 'center', toolbar: '#prove', title: '查看证明'},
             {align: 'center', toolbar: '#tableBar', title: '操作', minWidth: 140}
         ]];
+
     };
 
     // 渲染表格

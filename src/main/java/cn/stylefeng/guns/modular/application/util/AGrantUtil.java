@@ -80,6 +80,7 @@ public class AGrantUtil {
         }
         return path;
     }
+
     public ArrayList<File> getFiles(String path) throws Exception {
         //目标集合fileList
         ArrayList<File> fileList = new ArrayList<File>();
@@ -98,8 +99,6 @@ public class AGrantUtil {
         }
         return fileList;
     }
-
-
 
 
     public Stu fillGrant(Stu stu, User user) {
