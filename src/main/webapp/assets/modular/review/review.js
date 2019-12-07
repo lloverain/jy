@@ -58,6 +58,7 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
 
     // 渲染表格
     var tableResult = table.render({
+        id:'review',
         elem: '#' + review.tableId,
         url: Feng.ctxPath + '/review/selectAll',
         page: true,

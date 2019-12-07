@@ -10,14 +10,12 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
     var laydate = layui.laydate;
     var admin = layui.admin;
     var upload = layui.upload;
-
     var toExamine = {
         tableId: "toExamineTable",    //表格id
         condition: {
             name: ""
         }
     };
-
     /**
      * 初始化表格的列
      */
@@ -68,7 +66,6 @@ function submission() {
            }
             var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
             parent.layer.close(index);
-
         }
     });
 }
