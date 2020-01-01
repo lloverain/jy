@@ -68,6 +68,9 @@ function imgPreview(fileDom) {
     reader.readAsDataURL(file);
 }
 
+/**
+ * 上传申请数据
+ */
 function uploaddata() {
     var $ = layui.jquery;
     var form = new FormData($("#form_grant")[0]);

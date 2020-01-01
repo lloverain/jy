@@ -115,6 +115,10 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
         // });
     };
 
+    /**
+     * 审核通过
+     * @param data
+     */
     review.agree = function (data) {
         top.layui.admin.open({
             type: 2,
@@ -124,12 +128,16 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
             title: '审核通过意见',
             content: Feng.ctxPath + '/review/totoExamine?applyId='+data.applyId,
             end: function () {
-                admin.getTempData('formOk') && table.reload(review.tableId);
+                // admin.getTempData('formOk') && table.reload(review.tableId);
+                location.reload();
             }
         });
-
     };
 
+    /**
+     * 审核不通过
+     * @param data
+     */
     review.noagree = function (data){
         var operation = function () {
             var ajax = new $ax(Feng.ctxPath + "/review/toExamine", function () {

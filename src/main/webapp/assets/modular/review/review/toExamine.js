@@ -29,6 +29,9 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
         ]];
     };
 
+    /**
+     * 查询其他教师及其以上领导意见
+     */
     // 渲染表格
     var tableResult = table.render({
         elem: '#' + toExamine.tableId,
@@ -43,13 +46,13 @@ layui.use(['layer', 'form', 'table', 'upload', 'ztree', 'laydate', 'admin', 'ax'
 
 });
 
+/**
+ *提交审核意见
+ */
 function submission() {
     var $ = layui.jquery;
     var $ax = layui.ax;
     var form = new FormData($("#form_opinion")[0]);
-    // var applyId = $("[name ='applyId']").val();
-    // var auditComments = $("[name = 'auditComments']").val();
-    // var remarks = $("[name = 'remarks']").val();
     $.ajax({
         url: Feng.ctxPath + "/review/addOpinion",
         type: 'POST',
